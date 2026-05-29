@@ -1,0 +1,12 @@
+{
+  "block.teleportblock.teleport_block": "Teleport Block",
+  "teleportblock.message.cannot_self_link": "Cannot link a block to itself!",
+  "teleportblock.message.first_selected": "First block selected. Shift+RMB on the second block.",
+  "teleportblock.message.linked": "Blocks linked!",
+  "teleportblock.message.first_not_found": "First block not found!",
+  "teleportblock.message.too_far": "Blocks are too far apart! Max distance: %s blocks.",
+  "teleportblock.message.blocked": "Path blocked! Free 2 blocks above the anchor.",
+  "teleportblock.message.not_linked": "Block is not linked! Use Shift+RMB to link.",
+  "teleportblock.message.cooldown": "Cooldown! Wait %s second(s).",
+  "teleportblock.message.dismount": "You must dismount before teleporting!"
+}

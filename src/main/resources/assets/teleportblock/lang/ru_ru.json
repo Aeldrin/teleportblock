@@ -1,0 +1,12 @@
+{
+  "block.teleportblock.teleport_block": "Блок телепортации",
+  "teleportblock.message.cannot_self_link": "Нельзя связать блок с самим собой!",
+  "teleportblock.message.first_selected": "Первый блок выбран. Shift+ПКМ на второй блок.",
+  "teleportblock.message.linked": "Блоки связаны!",
+  "teleportblock.message.first_not_found": "Первый блок не найден!",
+  "teleportblock.message.too_far": "Блоки слишком далеко! Макс. расстояние: %s блоков.",
+  "teleportblock.message.blocked": "Путь заблокирован! Освободи 2 блока над якорем.",
+  "teleportblock.message.not_linked": "Блок не связан! Используй Shift+ПКМ для связки.",
+  "teleportblock.message.cooldown": "Перезарядка! Подожди %s сек.",
+  "teleportblock.message.dismount": "Сначала спешись!"
+}
