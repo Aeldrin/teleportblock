@@ -8,5 +8,7 @@
   "teleportblock.message.blocked": "Путь заблокирован! Освободи 2 блока над якорем.",
   "teleportblock.message.not_linked": "Блок не связан! Используй Shift+ПКМ для связки.",
   "teleportblock.message.cooldown": "Перезарядка! Подожди %s сек.",
-  "teleportblock.message.dismount": "Сначала спешись!"
+  "teleportblock.message.dismount": "Сначала спешись!",
+  "teleportblock.jade.linked": "Связан",
+  "teleportblock.jade.not_linked": "Не связан"
 }

@@ -8,5 +8,7 @@
   "teleportblock.message.blocked": "Path blocked! Free 2 blocks above the anchor.",
   "teleportblock.message.not_linked": "Block is not linked! Use Shift+RMB to link.",
   "teleportblock.message.cooldown": "Cooldown! Wait %s second(s).",
-  "teleportblock.message.dismount": "You must dismount before teleporting!"
+  "teleportblock.message.dismount": "You must dismount before teleporting!",
+  "teleportblock.jade.linked": "Linked",
+  "teleportblock.jade.not_linked": "Not linked"
 }

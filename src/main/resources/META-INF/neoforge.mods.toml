@@ -21,3 +21,10 @@ type = "required"
 versionRange = "[1.21.1,1.22)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.teleportblock]]
+modId = "jade"
+type = "optional"
+versionRange = "[15,)"
+ordering = "NONE"
+side = "BOTH"
