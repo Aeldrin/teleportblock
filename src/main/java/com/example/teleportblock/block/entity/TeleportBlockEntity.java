@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 public class TeleportBlockEntity extends BlockEntity {
     @Nullable
     private BlockPos target;
+    @Nullable
+    private BlockPos realTarget; // реальные координаты для отображения
 
     public TeleportBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TELEPORT_BLOCK_ENTITY.get(), pos, state);
@@ -23,6 +25,13 @@ public class TeleportBlockEntity extends BlockEntity {
         setChanged();
     }
 
+    public @Nullable BlockPos getRealTarget() { return realTarget; }
+
+    public void setRealTarget(BlockPos realTarget) {
+        this.realTarget = realTarget;
+        setChanged();
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
@@ -30,6 +39,11 @@ public class TeleportBlockEntity extends BlockEntity {
             tag.putInt("target_x", target.getX());
             tag.putInt("target_y", target.getY());
             tag.putInt("target_z", target.getZ());
+        }
+        if (realTarget != null) {
+            tag.putInt("real_target_x", realTarget.getX());
+            tag.putInt("real_target_y", realTarget.getY());
+            tag.putInt("real_target_z", realTarget.getZ());
         }
     }
 
@@ -41,6 +55,13 @@ public class TeleportBlockEntity extends BlockEntity {
                 tag.getInt("target_x"),
                 tag.getInt("target_y"),
                 tag.getInt("target_z")
+            );
+        }
+        if (tag.contains("real_target_x")) {
+            realTarget = new BlockPos(
+                tag.getInt("real_target_x"),
+                tag.getInt("real_target_y"),
+                tag.getInt("real_target_z")
             );
         }
     }

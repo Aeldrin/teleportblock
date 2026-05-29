@@ -28,3 +28,10 @@ type = "optional"
 versionRange = "[15,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.teleportblock]]
+modId = "sable"
+type = "optional"
+versionRange = "[1.0,)"
+ordering = "NONE"
+side = "BOTH"

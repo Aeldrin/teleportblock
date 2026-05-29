@@ -8,7 +8,7 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = '1.0.0'
+version = '1.2.0'
 group = 'com.example.teleportblock'
 
 sourceSets.main.resources {
@@ -23,6 +23,13 @@ repositories {
         url = "https://api.modrinth.com/maven"
         content {
             includeGroup "maven.modrinth"
+        }
+    }
+    maven {
+        name = "RyanHCode Maven"
+        url = "https://maven.ryanhcode.dev/releases"
+        content {
+            includeGroup "dev.ryanhcode.sable-companion"
         }
     }
 }
@@ -66,6 +73,11 @@ configurations {
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
     compileOnly "maven.modrinth:jade:15.5.2+neoforge"
+    jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:[1.5,)")) {
+        version {
+            prefer "1.5.0"
+        }
+    }
 }
 
 tasks.withType(ProcessResources).configureEach {

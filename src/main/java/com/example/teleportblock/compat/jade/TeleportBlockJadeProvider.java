@@ -2,6 +2,7 @@ package com.example.teleportblock.compat.jade;
 
 import com.example.teleportblock.block.entity.TeleportBlockEntity;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -10,6 +11,8 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import com.example.teleportblock.compat.sable.SableCompat;
+import net.minecraft.world.phys.Vec3;
 
 public class TeleportBlockJadeProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
@@ -37,9 +40,13 @@ public class TeleportBlockJadeProvider implements IBlockComponentProvider, IServ
             boolean linked = be.getTarget() != null;
             data.putBoolean("linked", linked);
             if (linked) {
-                data.putInt("tx", be.getTarget().getX());
-                data.putInt("ty", be.getTarget().getY());
-                data.putInt("tz", be.getTarget().getZ());
+                Vec3 real = SableCompat.toGlobalPos(
+                    accessor.getLevel(),
+                    Vec3.atCenterOf(be.getTarget())
+                );
+                data.putInt("tx", (int) real.x);
+                data.putInt("ty", (int) real.y);
+                data.putInt("tz", (int) real.z);
             }
         }
     }

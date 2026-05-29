@@ -2,6 +2,7 @@ package com.example.teleportblock.block;
 
 import com.example.teleportblock.ModConfig;
 import com.example.teleportblock.block.entity.TeleportBlockEntity;
+import com.example.teleportblock.compat.sable.SableCompat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -66,15 +68,21 @@ public class TeleportBlock extends BaseEntityBlock {
                     player.sendSystemMessage(Component.translatable("teleportblock.message.cannot_self_link"));
                     return InteractionResult.FAIL;
                 }
+
                 int maxDist = ModConfig.MAX_LINK_DISTANCE.get();
-                if (firstPos.distSqr(pos) > (double) maxDist * maxDist) {
+                Vec3 a = Vec3.atCenterOf(firstPos);
+                Vec3 b = Vec3.atCenterOf(pos);
+                if (SableCompat.distanceSqr(level, a, b) > (double) maxDist * maxDist) {
                     player.sendSystemMessage(Component.translatable("teleportblock.message.too_far", maxDist));
                     return InteractionResult.FAIL;
                 }
+
                 TeleportBlockEntity firstBe = (TeleportBlockEntity) level.getBlockEntity(firstPos);
                 if (firstBe != null) {
-                    firstBe.setTarget(pos);
-                    be.setTarget(firstPos);
+                firstBe.setTarget(pos);
+                firstBe.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(pos))));
+                be.setTarget(firstPos);
+                be.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(firstPos))));
                     level.playSound(null, pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
                     player.sendSystemMessage(Component.translatable("teleportblock.message.linked"));
                 } else {
@@ -124,9 +132,13 @@ public class TeleportBlock extends BaseEntityBlock {
                             target.getX() + 0.5, target.getY() + 1.0, target.getZ() + 0.5,
                             40, 0.3, 0.5, 0.3, 0.08);
                 }
+
                 level.playSound(null, pos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
                 level.playSound(null, target, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
-                player.teleportTo(target.getX() + 0.5, target.getY() + 1.0, target.getZ() + 0.5);
+
+                Vec3 targetVec = new Vec3(target.getX() + 0.5, target.getY() + 1.0, target.getZ() + 0.5);
+                Vec3 globalTarget = SableCompat.toGlobalPos(level, targetVec);
+                player.teleportTo(globalTarget.x, globalTarget.y, globalTarget.z);
             } else {
                 player.sendSystemMessage(Component.translatable("teleportblock.message.not_linked"));
             }
@@ -135,23 +147,21 @@ public class TeleportBlock extends BaseEntityBlock {
     }
 
     @Override
-public void onRemove(BlockState state, Level level, BlockPos pos,
-                     BlockState newState, boolean movedByPiston) {
-    if (!level.isClientSide()) {
-        // Убираем из ожидания связки если блок сломан
-        PENDING_LINKS.values().removeIf(pending -> pending.equals(pos));
+    public void onRemove(BlockState state, Level level, BlockPos pos,
+                         BlockState newState, boolean movedByPiston) {
+        if (!level.isClientSide()) {
+            PENDING_LINKS.values().removeIf(pending -> pending.equals(pos));
 
-        // Разрываем связь у парного блока
-        TeleportBlockEntity be = (TeleportBlockEntity) level.getBlockEntity(pos);
-        if (be != null && be.getTarget() != null) {
-            BlockEntity paired = level.getBlockEntity(be.getTarget());
-            if (paired instanceof TeleportBlockEntity pairedBe) {
-                pairedBe.setTarget(null);
+            TeleportBlockEntity be = (TeleportBlockEntity) level.getBlockEntity(pos);
+            if (be != null && be.getTarget() != null) {
+                BlockEntity paired = level.getBlockEntity(be.getTarget());
+                if (paired instanceof TeleportBlockEntity pairedBe) {
+                    pairedBe.setTarget(null);
+                }
             }
         }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
-    super.onRemove(state, level, pos, newState, movedByPiston);
-}
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
