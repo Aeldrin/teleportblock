@@ -7,12 +7,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import java.util.UUID;
 
 public class TeleportBlockEntity extends BlockEntity {
     @Nullable
     private BlockPos target;
     @Nullable
-    private BlockPos realTarget; // реальные координаты для отображения
+    private BlockPos realTarget;
+    @Nullable
+    private UUID waystoneTarget;
 
     public TeleportBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TELEPORT_BLOCK_ENTITY.get(), pos, state);
@@ -22,6 +25,7 @@ public class TeleportBlockEntity extends BlockEntity {
 
     public void setTarget(BlockPos target) {
         this.target = target;
+        this.waystoneTarget = null;
         setChanged();
     }
 
@@ -29,6 +33,14 @@ public class TeleportBlockEntity extends BlockEntity {
 
     public void setRealTarget(BlockPos realTarget) {
         this.realTarget = realTarget;
+        setChanged();
+    }
+
+    public @Nullable UUID getWaystoneTarget() { return waystoneTarget; }
+
+    public void setWaystoneTarget(@Nullable UUID uuid) {
+        this.waystoneTarget = uuid;
+        this.target = null;
         setChanged();
     }
 
@@ -44,6 +56,9 @@ public class TeleportBlockEntity extends BlockEntity {
             tag.putInt("real_target_x", realTarget.getX());
             tag.putInt("real_target_y", realTarget.getY());
             tag.putInt("real_target_z", realTarget.getZ());
+        }
+        if (waystoneTarget != null) {
+            tag.putUUID("waystone_target", waystoneTarget);
         }
     }
 
@@ -63,6 +78,9 @@ public class TeleportBlockEntity extends BlockEntity {
                 tag.getInt("real_target_y"),
                 tag.getInt("real_target_z")
             );
+        }
+        if (tag.contains("waystone_target")) {
+            waystoneTarget = tag.getUUID("waystone_target");
         }
     }
 }

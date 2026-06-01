@@ -35,3 +35,24 @@ type = "optional"
 versionRange = "[1.0,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.teleportblock]]
+modId = "jei"
+type = "optional"
+versionRange = "[19,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.teleportblock]]
+modId = "roughlyenoughitems"
+type = "optional"
+versionRange = "[16,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.teleportblock]]
+modId = "emi"
+type = "optional"
+versionRange = "[1.1,)"
+ordering = "NONE"
+side = "CLIENT"

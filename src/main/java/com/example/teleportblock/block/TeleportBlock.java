@@ -3,6 +3,7 @@ package com.example.teleportblock.block;
 import com.example.teleportblock.ModConfig;
 import com.example.teleportblock.block.entity.TeleportBlockEntity;
 import com.example.teleportblock.compat.sable.SableCompat;
+import com.example.teleportblock.compat.waystones.WaystoneCompat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -51,6 +53,14 @@ public class TeleportBlock extends BaseEntityBlock {
         }
     }
 
+    public static @Nullable BlockPos getPendingLink(UUID playerId) {
+        return PENDING_LINKS.get(playerId);
+    }
+
+    public static void removePendingLink(UUID playerId) {
+        PENDING_LINKS.remove(playerId);
+    }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level,
                                                 BlockPos pos, Player player,
@@ -62,6 +72,7 @@ public class TeleportBlock extends BaseEntityBlock {
 
         if (player.isShiftKeyDown()) {
             UUID id = player.getUUID();
+
             if (PENDING_LINKS.containsKey(id)) {
                 BlockPos firstPos = PENDING_LINKS.remove(id);
                 if (firstPos.equals(pos)) {
@@ -79,10 +90,10 @@ public class TeleportBlock extends BaseEntityBlock {
 
                 TeleportBlockEntity firstBe = (TeleportBlockEntity) level.getBlockEntity(firstPos);
                 if (firstBe != null) {
-                firstBe.setTarget(pos);
-                firstBe.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(pos))));
-                be.setTarget(firstPos);
-                be.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(firstPos))));
+                    firstBe.setTarget(pos);
+                    firstBe.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(pos))));
+                    be.setTarget(firstPos);
+                    be.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(firstPos))));
                     level.playSound(null, pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
                     player.sendSystemMessage(Component.translatable("teleportblock.message.linked"));
                 } else {
@@ -107,6 +118,36 @@ public class TeleportBlock extends BaseEntityBlock {
                 return InteractionResult.FAIL;
             }
 
+            // Телепорт на Waystone
+            UUID waystoneTarget = be.getWaystoneTarget();
+            if (waystoneTarget != null
+                    && level instanceof ServerLevel serverLevel
+                    && ModList.get().isLoaded("waystones")) {
+                BlockPos waystonePos = WaystoneCompat.getWaystonePos(serverLevel, waystoneTarget);
+                if (waystonePos == null) {
+                    player.sendSystemMessage(Component.translatable("teleportblock.message.waystone_lost"));
+                    be.setWaystoneTarget(null);
+                    return InteractionResult.FAIL;
+                }
+
+                COOLDOWNS.put(player.getUUID(), now);
+
+                if (level instanceof ServerLevel sl) {
+                    sl.sendParticles(ParticleTypes.PORTAL,
+                            pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
+                            40, 0.3, 0.5, 0.3, 0.08);
+                    sl.sendParticles(ParticleTypes.PORTAL,
+                            waystonePos.getX() + 0.5, waystonePos.getY() + 1.0, waystonePos.getZ() + 0.5,
+                            40, 0.3, 0.5, 0.3, 0.08);
+                }
+
+                level.playSound(null, pos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
+                level.playSound(null, waystonePos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
+                player.teleportTo(waystonePos.getX() + 0.5, waystonePos.getY() + 1.0, waystonePos.getZ() + 0.5);
+                return InteractionResult.SUCCESS;
+            }
+
+            // Обычный телепорт
             BlockPos target = be.getTarget();
             if (target != null) {
                 BlockPos feet = target.above();

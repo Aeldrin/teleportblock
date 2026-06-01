@@ -10,5 +10,18 @@
   "teleportblock.message.cooldown": "Перезарядка! Подожди %s сек.",
   "teleportblock.message.dismount": "Сначала спешись!",
   "teleportblock.jade.linked": "Связан",
+  "teleportblock.jade.linked_waystone": "Путеводный камень",
+  "teleportblock.ponder.linking.header": "Связка блоков",
+  "teleportblock.ponder.linking.text_1": "Shift-ПКМ по первому блоку чтобы начать связку",
+  "teleportblock.ponder.linking.text_2": "Shift-ПКМ по второму блоку чтобы завершить связку",
+  "teleportblock.ponder.linking.text_3": "Блоки теперь связаны!",
+  "teleportblock.ponder.teleporting.header": "Телепортация",
+  "teleportblock.ponder.teleporting.text_1": "ПКМ чтобы телепортироваться к связанному блоку",
+  "teleportblock.ponder.teleporting.text_2": "Максимальная дальность настраивается в конфиг файле",
+  "teleportblock.message.linked_to_waystone": "Связан с Путеводным камнем: %s",
+  "teleportblock.message.waystone_not_found": "Путеводный камень не найден",
+  "teleportblock.message.waystone_lost": "Связанный Путеводный камень больше не существует",
+  "teleportblock.message.no_pending_block": "Сначала Shift-ПКМ на Блок телепортации, затем используй это на Путеводном камне",
+  "teleportblock.jei.description": "Телепортирует игроков к связанному блоку. Shift-ПКМ по двум блокам чтобы связать их. Максимальная дальность настраивается в конфиге.",
   "teleportblock.jade.not_linked": "Не связан"
 }

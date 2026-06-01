@@ -1,4 +1,4 @@
-{
+ {
   "block.teleportblock.teleport_block": "Teleport Block",
   "teleportblock.message.cannot_self_link": "Cannot link a block to itself!",
   "teleportblock.message.first_selected": "First block selected. Shift+RMB on the second block.",
@@ -8,7 +8,20 @@
   "teleportblock.message.blocked": "Path blocked! Free 2 blocks above the anchor.",
   "teleportblock.message.not_linked": "Block is not linked! Use Shift+RMB to link.",
   "teleportblock.message.cooldown": "Cooldown! Wait %s second(s).",
+  "teleportblock.ponder.linking.header": "Linking Blocks",
+  "teleportblock.ponder.linking.text_1": "Shift-RMB the first block to begin linking",
+  "teleportblock.ponder.linking.text_2": "Shift-RMB the second block to complete the link",
+  "teleportblock.ponder.linking.text_3": "The blocks are now linked!",
+  "teleportblock.ponder.teleporting.header": "Teleporting",
+  "teleportblock.ponder.teleporting.text_1": "RMB to teleport to the linked block",
+  "teleportblock.ponder.teleporting.text_2": "Maximum range is configurable in the config file",
   "teleportblock.message.dismount": "You must dismount before teleporting!",
   "teleportblock.jade.linked": "Linked",
+  "teleportblock.jade.linked_waystone": "Waystone",
+  "teleportblock.message.linked_to_waystone": "Linked to waystone: %s",
+  "teleportblock.message.waystone_not_found": "Waystone not found",
+  "teleportblock.message.waystone_lost": "Linked waystone no longer exists",
+  "teleportblock.message.no_pending_block": "Shift-RMB a Teleport Block first, then use this on a Waystone",
+  "teleportblock.jei.description": "Teleports players to a linked block. Shift-RMB two blocks to link them. Maximum range is configurable.",
   "teleportblock.jade.not_linked": "Not linked"
 }

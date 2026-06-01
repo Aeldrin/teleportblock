@@ -8,7 +8,7 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = '1.2.0'
+version = '1.5.0'
 group = 'com.example.teleportblock'
 
 sourceSets.main.resources {
@@ -23,6 +23,29 @@ repositories {
         url = "https://api.modrinth.com/maven"
         content {
             includeGroup "maven.modrinth"
+        }
+    }
+    maven {
+        name = "CurseMaven"
+        url = "https://www.cursemaven.com"
+    }
+    maven {
+        name = "shedaniel Maven"
+        url = "https://maven.shedaniel.me/"
+    }
+    maven {
+        name = "Create Maven"
+        url = "https://maven.createmod.net"
+    }
+    maven {
+        name = "Registrate Maven"
+        url = "https://maven.ithundxr.dev/snapshots"
+    }
+    maven {
+        name = "Twelve Iterations Maven"
+        url = "https://maven.twelveiterations.com/repository/maven-public/"
+        content {
+            includeGroup "net.blay09.mods"
         }
     }
     maven {
@@ -73,6 +96,14 @@ configurations {
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
     compileOnly "maven.modrinth:jade:15.5.2+neoforge"
+    compileOnly "curse.maven:jei-238222:7420587"
+    compileOnly "maven.modrinth:emi:1.1.22+1.21.1+neoforge"
+    compileOnly "me.shedaniel.cloth:cloth-config-neoforge:15.0.140"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:16.0.799"
+    compileOnly "curse.maven:waystones-245755:6447120"
+    compileOnly("com.simibubi.create:create-1.21.1:6.0.10-280:slim") { transitive = false }
+    compileOnly "net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1"
+    compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:1.0.6"
     jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:[1.5,)")) {
         version {
             prefer "1.5.0"
