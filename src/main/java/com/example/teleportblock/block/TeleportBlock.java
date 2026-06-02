@@ -6,6 +6,7 @@ import com.example.teleportblock.compat.sable.SableCompat;
 import com.example.teleportblock.compat.waystones.WaystoneCompat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -22,6 +24,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +38,9 @@ public class TeleportBlock extends BaseEntityBlock {
     private static final Map<UUID, BlockPos> PENDING_LINKS = new HashMap<>();
     private static final Map<UUID, Long> COOLDOWNS = new HashMap<>();
 
+    // Полный куб для визуала и хитбокса
+    private static final VoxelShape SHAPE = Shapes.block();
+
     public TeleportBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
@@ -40,6 +48,17 @@ public class TeleportBlock extends BaseEntityBlock {
     @Override
     public MapCodec<? extends BaseEntityBlock> codec() {
         return simpleCodec(TeleportBlock::new);
+    }
+
+    // Заборы и панели проверяют эту форму — возвращаем пустую
+    @Override
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return Shapes.empty();
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
     }
 
     @Override
@@ -118,7 +137,6 @@ public class TeleportBlock extends BaseEntityBlock {
                 return InteractionResult.FAIL;
             }
 
-            // Телепорт на Waystone
             UUID waystoneTarget = be.getWaystoneTarget();
             if (waystoneTarget != null
                     && level instanceof ServerLevel serverLevel
@@ -147,7 +165,6 @@ public class TeleportBlock extends BaseEntityBlock {
                 return InteractionResult.SUCCESS;
             }
 
-            // Обычный телепорт
             BlockPos target = be.getTarget();
             if (target != null) {
                 BlockPos feet = target.above();

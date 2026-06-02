@@ -19,5 +19,6 @@ public class ModBlocks {
                             .lightLevel(state -> 15)
                             .sound(SoundType.AMETHYST)
                             .requiresCorrectToolForDrops()
+                            .noOcclusion()
             ));
 }
