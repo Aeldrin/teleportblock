@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Blok Teleportacji",
+
   "teleportblock.message.cannot_self_link": "Nie można połączyć bloku z samym sobą!",
   "teleportblock.message.first_selected": "Pierwszy blok wybrany. Shift+PPM na drugi blok.",
   "teleportblock.message.linked": "Bloki połączone!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Ścieżka zablokowana! Zwolnij 2 bloki nad kotwicą.",
   "teleportblock.message.not_linked": "Blok nie jest połączony! Użyj Shift+PPM aby połączyć.",
   "teleportblock.message.cooldown": "Czas odnowienia! Poczekaj %s sekund(y).",
+  "teleportblock.message.dismount": "Musisz zsiąść przed teleportacją!",
+  "teleportblock.message.named": "Nazwa połączenia: %s",
+  "teleportblock.message.linked_to_waystone": "Połączony z kamieniem drogi: %s",
+  "teleportblock.message.waystone_not_found": "Nie znaleziono kamienia drogi",
+  "teleportblock.message.waystone_lost": "Połączony kamień drogi już nie istnieje",
+  "teleportblock.message.no_pending_block": "Najpierw użyj Shift+PPM na Blok Teleportacji, a następnie użyj go na Kamieniu Drogi",
+  "teleportblock.message.chunk_protected": "Este chunk está protegido!",
+
   "teleportblock.ponder.linking.header": "Łączenie Bloków",
   "teleportblock.ponder.linking.text_1": "Shift+PPM na pierwszy blok aby rozpocząć łączenie",
   "teleportblock.ponder.linking.text_2": "Shift+PPM na drugi blok aby zakończyć łączenie",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Teleportacja",
   "teleportblock.ponder.teleporting.text_1": "PPM aby teleportować się do połączonego bloku",
   "teleportblock.ponder.teleporting.text_2": "Maksymalny zasięg można skonfigurować w pliku konfiguracyjnym",
-  "teleportblock.message.dismount": "Musisz zsiąść przed teleportacją!",
+
+  "teleportblock.jei.description": "Teleportuje graczy do połączonego bloku. Shift+PPM na dwa bloki aby je połączyć. Maksymalny zasięg jest konfigurowalny.",
+
+  "teleportblock.jade.not_linked": "Niepołączony",
   "teleportblock.jade.linked": "Połączony",
   "teleportblock.jade.linked_waystone": "Kamień Drogi",
-  "teleportblock.message.linked_to_waystone": "Połączony z kamieniem drogi: %s",
-  "teleportblock.message.waystone_not_found": "Nie znaleziono kamienia drogi",
-  "teleportblock.message.waystone_lost": "Połączony kamień drogi już nie istnieje",
-  "teleportblock.message.no_pending_block": "Najpierw użyj Shift+PPM na Blok Teleportacji, a następnie użyj go na Kamieniu Drogi",
-  "teleportblock.jei.description": "Teleportuje graczy do połączonego bloku. Shift+PPM na dwa bloki aby je połączyć. Maksymalny zasięg jest konfigurowalny.",
-  "teleportblock.jade.not_linked": "Niepołączony"
+
+  "advancement.teleportblock.root.title": "Blok Teleportacji",
+  "advancement.teleportblock.root.description": "Zrób Blok Teleportacji",
+  "advancement.teleportblock.link_blocks.title": "Połączono",
+  "advancement.teleportblock.link_blocks.description": "Połącz dwa Bloki Teleportacji",
+  "advancement.teleportblock.first_teleport.title": "Skok Wiary",
+  "advancement.teleportblock.first_teleport.description": "Teleportuj się po raz pierwszy",
+  "advancement.teleportblock.long_jump.title": "Daleki Skok",
+  "advancement.teleportblock.long_jump.description": "Teleportuj się 10 razy",
+  "advancement.teleportblock.traveler.title": "Podróżnik",
+  "advancement.teleportblock.traveler.description": "Teleportuj się 100 razy",
+
+  "stat.teleportblock.teleportations": "Teleportacje"
 }

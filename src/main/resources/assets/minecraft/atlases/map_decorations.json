@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "teleportblock:map/decorations/teleport_block"
+    },
+    {
+      "type": "single",
+      "resource": "teleportblock:map/decorations/teleport_block_frame"
+    }
+  ]
+}

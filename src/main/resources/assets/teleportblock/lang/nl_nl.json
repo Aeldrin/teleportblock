@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Teleportblok",
+
   "teleportblock.message.cannot_self_link": "Een blok kan niet met zichzelf worden verbonden!",
   "teleportblock.message.first_selected": "Eerste blok geselecteerd. Shift+Rechtermuisknop op het tweede blok.",
   "teleportblock.message.linked": "Blokken verbonden!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Pad geblokkeerd! Maak 2 blokken boven het anker vrij.",
   "teleportblock.message.not_linked": "Het blok is niet verbonden! Gebruik Shift+Rechtermuisknop om te verbinden.",
   "teleportblock.message.cooldown": "Herlaaditijd! Wacht %s seconde(n).",
+  "teleportblock.message.dismount": "Je moet afstijgen voordat je kunt teleporteren!",
+  "teleportblock.message.named": "Verbinding benoemd: %s",
+  "teleportblock.message.linked_to_waystone": "Verbonden met wegsteen: %s",
+  "teleportblock.message.waystone_not_found": "Wegsteen niet gevonden",
+  "teleportblock.message.waystone_lost": "De verbonden wegsteen bestaat niet meer",
+  "teleportblock.message.no_pending_block": "Gebruik eerst Shift+Rechtermuisknop op een Teleportblok, gebruik het daarna op een Wegsteen",
+  "teleportblock.message.chunk_protected": "Dit chunk is beschermd!",
+
   "teleportblock.ponder.linking.header": "Blokken Verbinden",
   "teleportblock.ponder.linking.text_1": "Shift+Rechtermuisknop op het eerste blok om te beginnen met verbinden",
   "teleportblock.ponder.linking.text_2": "Shift+Rechtermuisknop op het tweede blok om het verbinden te voltooien",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Teleporteren",
   "teleportblock.ponder.teleporting.text_1": "Rechtermuisknop om te teleporteren naar het verbonden blok",
   "teleportblock.ponder.teleporting.text_2": "De maximale afstand is instelbaar in het configuratiebestand",
-  "teleportblock.message.dismount": "Je moet afstijgen voordat je kunt teleporteren!",
+
+  "teleportblock.jei.description": "Teleporteert spelers naar een verbonden blok. Shift+Rechtermuisknop op twee blokken om ze te verbinden. De maximale afstand is instelbaar.",
+
+  "teleportblock.jade.not_linked": "Niet verbonden",
   "teleportblock.jade.linked": "Verbonden",
   "teleportblock.jade.linked_waystone": "Wegstteen",
-  "teleportblock.message.linked_to_waystone": "Verbonden met wegsteen: %s",
-  "teleportblock.message.waystone_not_found": "Wegsteen niet gevonden",
-  "teleportblock.message.waystone_lost": "De verbonden wegsteen bestaat niet meer",
-  "teleportblock.message.no_pending_block": "Gebruik eerst Shift+Rechtermuisknop op een Teleportblok, gebruik het daarna op een Wegsteen",
-  "teleportblock.jei.description": "Teleporteert spelers naar een verbonden blok. Shift+Rechtermuisknop op twee blokken om ze te verbinden. De maximale afstand is instelbaar.",
-  "teleportblock.jade.not_linked": "Niet verbonden"
+
+  "advancement.teleportblock.root.title": "Teleportblok",
+  "advancement.teleportblock.root.description": "Maak een Teleportblok",
+  "advancement.teleportblock.link_blocks.title": "Verbonden",
+  "advancement.teleportblock.link_blocks.description": "Verbind twee Teleportblokken",
+  "advancement.teleportblock.first_teleport.title": "Sprong des Geloofs",
+  "advancement.teleportblock.first_teleport.description": "Teleporteer voor de eerste keer",
+  "advancement.teleportblock.long_jump.title": "Verre Sprong",
+  "advancement.teleportblock.long_jump.description": "Teleporteer 10 keer",
+  "advancement.teleportblock.traveler.title": "Reiziger",
+  "advancement.teleportblock.traveler.description": "Teleporteer 100 keer",
+
+  "stat.teleportblock.teleportations": "Teleportaties"
 }

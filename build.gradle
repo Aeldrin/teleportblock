@@ -8,7 +8,7 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = '1.5.1'
+version = '1.6.0'
 group = 'com.example.teleportblock'
 
 sourceSets.main.resources {
@@ -54,6 +54,10 @@ repositories {
         content {
             includeGroup "dev.ryanhcode.sable-companion"
         }
+    }
+    maven {
+        name = "JourneyMap Maven"
+        url = "https://maven.blamejared.com"
     }
 }
 
@@ -101,14 +105,22 @@ dependencies {
     compileOnly "me.shedaniel.cloth:cloth-config-neoforge:15.0.140"
     compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:16.0.799"
     compileOnly "curse.maven:waystones-245755:6447120"
+    compileOnly "curse.maven:ftb-chunks-forge-314906:7608681"
+    compileOnly "curse.maven:ftb-library-forge-404465:7245937"
+    compileOnly "curse.maven:ftb-teams-forge-404468:7369021"
     compileOnly("com.simibubi.create:create-1.21.1:6.0.10-280:slim") { transitive = false }
     compileOnly "net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1"
     compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:1.0.6"
+    compileOnly(group: 'info.journeymap', name: 'journeymap-api-neoforge', version: '2.0.0-1.21.1-SNAPSHOT') { changing = true }
     jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:[1.5,)")) {
         version {
             prefer "1.5.0"
         }
     }
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 tasks.withType(ProcessResources).configureEach {

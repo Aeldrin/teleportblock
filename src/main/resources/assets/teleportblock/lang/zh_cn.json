@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "传送方块",
+
   "teleportblock.message.cannot_self_link": "不能将方块与自身连接！",
   "teleportblock.message.first_selected": "已选择第一个方块。按住Shift右键点击第二个方块。",
   "teleportblock.message.linked": "方块已连接！",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "路径被阻挡！请清空锚点上方两格空间。",
   "teleportblock.message.not_linked": "方块未连接！请使用Shift右键进行连接。",
   "teleportblock.message.cooldown": "冷却中！请等待 %s 秒。",
+  "teleportblock.message.dismount": "传送前请先下坐骑！",
+  "teleportblock.message.named": "链接已命名: %s",
+  "teleportblock.message.linked_to_waystone": "已连接至路径石：%s",
+  "teleportblock.message.waystone_not_found": "未找到路径石",
+  "teleportblock.message.waystone_lost": "已连接的路径石不再存在",
+  "teleportblock.message.no_pending_block": "请先对传送方块使用Shift右键，然后再对路径石使用",
+  "teleportblock.message.chunk_protected": "该区块受到保护！",
+
   "teleportblock.ponder.linking.header": "连接方块",
   "teleportblock.ponder.linking.text_1": "按住Shift右键点击第一个方块开始连接",
   "teleportblock.ponder.linking.text_2": "按住Shift右键点击第二个方块完成连接",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "传送",
   "teleportblock.ponder.teleporting.text_1": "右键点击传送至已连接的方块",
   "teleportblock.ponder.teleporting.text_2": "最大传送距离可在配置文件中调整",
-  "teleportblock.message.dismount": "传送前请先下坐骑！",
+
+  "teleportblock.jei.description": "将玩家传送至已连接的方块。对两个方块使用Shift右键进行连接。最大距离可在配置中调整。",
+
+  "teleportblock.jade.not_linked": "未连接",
   "teleportblock.jade.linked": "已连接",
   "teleportblock.jade.linked_waystone": "路径石",
-  "teleportblock.message.linked_to_waystone": "已连接至路径石：%s",
-  "teleportblock.message.waystone_not_found": "未找到路径石",
-  "teleportblock.message.waystone_lost": "已连接的路径石不再存在",
-  "teleportblock.message.no_pending_block": "请先对传送方块使用Shift右键，然后再对路径石使用",
-  "teleportblock.jei.description": "将玩家传送至已连接的方块。对两个方块使用Shift右键进行连接。最大距离可在配置中调整。",
-  "teleportblock.jade.not_linked": "未连接"
+
+  "advancement.teleportblock.root.title": "传送方块",
+  "advancement.teleportblock.root.description": "合成一个传送方块",
+  "advancement.teleportblock.link_blocks.title": "已连接",
+  "advancement.teleportblock.link_blocks.description": "连接两个传送方块",
+  "advancement.teleportblock.first_teleport.title": "信念之跃",
+  "advancement.teleportblock.first_teleport.description": "第一次传送",
+  "advancement.teleportblock.long_jump.title": "远距离跳跃",
+  "advancement.teleportblock.long_jump.description": "传送10次",
+  "advancement.teleportblock.traveler.title": "旅行者",
+  "advancement.teleportblock.traveler.description": "传送100次",
+
+  "stat.teleportblock.teleportations": "传送次数"
 }

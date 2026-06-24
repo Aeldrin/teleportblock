@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Işınlanma Bloğu",
+
   "teleportblock.message.cannot_self_link": "Bir blok kendisiyle bağlanamaz!",
   "teleportblock.message.first_selected": "İlk blok seçildi. İkinci bloğa Shift+Sağ tık yapın.",
   "teleportblock.message.linked": "Bloklar bağlandı!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Yol engellendi! Çapanın üzerindeki 2 bloğu boşalt.",
   "teleportblock.message.not_linked": "Blok bağlı değil! Bağlamak için Shift+Sağ tık kullanın.",
   "teleportblock.message.cooldown": "Bekleme süresi! %s saniye bekleyin.",
+  "teleportblock.message.dismount": "Işınlanmadan önce bineğinizden inmelisiniz!",
+  "teleportblock.message.named": "Bağlantı adlandırıldı: %s",
+  "teleportblock.message.linked_to_waystone": "Yol taşına bağlı: %s",
+  "teleportblock.message.waystone_not_found": "Yol taşı bulunamadı",
+  "teleportblock.message.waystone_lost": "Bağlı yol taşı artık mevcut değil",
+  "teleportblock.message.no_pending_block": "Önce bir Işınlanma Bloğuna Shift+Sağ tık yapın, ardından bir Yol Taşında kullanın",
+  "teleportblock.message.chunk_protected": "Bu chunk korunuyor!",
+
   "teleportblock.ponder.linking.header": "Blok Bağlama",
   "teleportblock.ponder.linking.text_1": "Bağlamaya başlamak için ilk bloğa Shift+Sağ tık yapın",
   "teleportblock.ponder.linking.text_2": "Bağlamayı tamamlamak için ikinci bloğa Shift+Sağ tık yapın",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Işınlanma",
   "teleportblock.ponder.teleporting.text_1": "Bağlı bloğa ışınlanmak için Sağ tık yapın",
   "teleportblock.ponder.teleporting.text_2": "Maksimum mesafe yapılandırma dosyasından ayarlanabilir",
-  "teleportblock.message.dismount": "Işınlanmadan önce bineğinizden inmelisiniz!",
+
+  "teleportblock.jei.description": "Oyuncuları bağlı bir bloğa ışınlar. Bağlamak için iki bloğa Shift+Sağ tık yapın. Maksimum mesafe yapılandırılabilir.",
+
+  "teleportblock.jade.not_linked": "Bağlı değil",
   "teleportblock.jade.linked": "Bağlı",
   "teleportblock.jade.linked_waystone": "Yol Taşı",
-  "teleportblock.message.linked_to_waystone": "Yol taşına bağlı: %s",
-  "teleportblock.message.waystone_not_found": "Yol taşı bulunamadı",
-  "teleportblock.message.waystone_lost": "Bağlı yol taşı artık mevcut değil",
-  "teleportblock.message.no_pending_block": "Önce bir Işınlanma Bloğuna Shift+Sağ tık yapın, ardından bir Yol Taşında kullanın",
-  "teleportblock.jei.description": "Oyuncuları bağlı bir bloğa ışınlar. Bağlamak için iki bloğa Shift+Sağ tık yapın. Maksimum mesafe yapılandırılabilir.",
-  "teleportblock.jade.not_linked": "Bağlı değil"
+
+  "advancement.teleportblock.root.title": "Işınlanma Bloğu",
+  "advancement.teleportblock.root.description": "Bir Işınlanma Bloğu yap",
+  "advancement.teleportblock.link_blocks.title": "Bağlandı",
+  "advancement.teleportblock.link_blocks.description": "İki Işınlanma Bloğunu bağla",
+  "advancement.teleportblock.first_teleport.title": "İnanç Sıçraması",
+  "advancement.teleportblock.first_teleport.description": "İlk kez ışınlan",
+  "advancement.teleportblock.long_jump.title": "Uzun Atlama",
+  "advancement.teleportblock.long_jump.description": "10 kez ışınlan",
+  "advancement.teleportblock.traveler.title": "Gezgin",
+  "advancement.teleportblock.traveler.description": "100 kez ışınlan",
+
+  "stat.teleportblock.teleportations": "Işınlanmalar"
 }

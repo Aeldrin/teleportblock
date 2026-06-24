@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Bloco de Teleporte",
+
   "teleportblock.message.cannot_self_link": "Não é possível ligar um bloco a si mesmo!",
   "teleportblock.message.first_selected": "Primeiro bloco selecionado. Shift+Botão direito no segundo bloco.",
   "teleportblock.message.linked": "Blocos ligados!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Caminho bloqueado! Libere 2 blocos acima da âncora.",
   "teleportblock.message.not_linked": "O bloco não está ligado! Use Shift+Botão direito para ligar.",
   "teleportblock.message.cooldown": "Recarga! Aguarde %s segundo(s).",
+  "teleportblock.message.dismount": "Você precisa desmontar antes de se teleportar!",
+  "teleportblock.message.named": "Link nomeado: %s",
+  "teleportblock.message.linked_to_waystone": "Ligado à pedra de caminho: %s",
+  "teleportblock.message.waystone_not_found": "Pedra de caminho não encontrada",
+  "teleportblock.message.waystone_lost": "A pedra de caminho ligada não existe mais",
+  "teleportblock.message.no_pending_block": "Primeiro use Shift+Botão direito em um Bloco de Teleporte, depois use em uma Pedra de Caminho",
+  "teleportblock.message.chunk_protected": "Este chunk está protegido!",
+
   "teleportblock.ponder.linking.header": "Ligando Blocos",
   "teleportblock.ponder.linking.text_1": "Shift+Botão direito no primeiro bloco para iniciar a ligação",
   "teleportblock.ponder.linking.text_2": "Shift+Botão direito no segundo bloco para concluir a ligação",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Teleportando",
   "teleportblock.ponder.teleporting.text_1": "Botão direito para teleportar ao bloco ligado",
   "teleportblock.ponder.teleporting.text_2": "O alcance máximo é configurável no arquivo de configuração",
-  "teleportblock.message.dismount": "Você precisa desmontar antes de se teleportar!",
+
+  "teleportblock.jei.description": "Teleporta jogadores para um bloco ligado. Shift+Botão direito em dois blocos para ligá-los. O alcance máximo é configurável.",
+
+  "teleportblock.jade.not_linked": "Não ligado",
   "teleportblock.jade.linked": "Ligado",
   "teleportblock.jade.linked_waystone": "Pedra de Caminho",
-  "teleportblock.message.linked_to_waystone": "Ligado à pedra de caminho: %s",
-  "teleportblock.message.waystone_not_found": "Pedra de caminho não encontrada",
-  "teleportblock.message.waystone_lost": "A pedra de caminho ligada não existe mais",
-  "teleportblock.message.no_pending_block": "Primeiro use Shift+Botão direito em um Bloco de Teleporte, depois use em uma Pedra de Caminho",
-  "teleportblock.jei.description": "Teleporta jogadores para um bloco ligado. Shift+Botão direito em dois blocos para ligá-los. O alcance máximo é configurável.",
-  "teleportblock.jade.not_linked": "Não ligado"
+
+  "advancement.teleportblock.root.title": "Bloco de Teleporte",
+  "advancement.teleportblock.root.description": "Fabrique um Bloco de Teleporte",
+  "advancement.teleportblock.link_blocks.title": "Conectado",
+  "advancement.teleportblock.link_blocks.description": "Conecte dois Blocos de Teleporte",
+  "advancement.teleportblock.first_teleport.title": "Salto de Fé",
+  "advancement.teleportblock.first_teleport.description": "Teleporte-se pela primeira vez",
+  "advancement.teleportblock.long_jump.title": "Salto Longo",
+  "advancement.teleportblock.long_jump.description": "Teleporte-se 10 vezes",
+  "advancement.teleportblock.traveler.title": "Viajante",
+  "advancement.teleportblock.traveler.description": "Teleporte-se 100 vezes",
+
+  "stat.teleportblock.teleportations": "Teleportes"
 }

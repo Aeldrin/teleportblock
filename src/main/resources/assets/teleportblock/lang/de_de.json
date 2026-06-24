@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Teleportblock",
+
   "teleportblock.message.cannot_self_link": "Ein Block kann nicht mit sich selbst verbunden werden!",
   "teleportblock.message.first_selected": "Erster Block ausgewählt. Shift+RMT auf den zweiten Block.",
   "teleportblock.message.linked": "Blöcke verbunden!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Weg versperrt! Befreie 2 Blöcke über dem Anker.",
   "teleportblock.message.not_linked": "Block ist nicht verbunden! Benutze Shift+RMT zum Verbinden.",
   "teleportblock.message.cooldown": "Abklingzeit! Warte %s Sekunde(n).",
+  "teleportblock.message.dismount": "Du musst absteigen bevor du teleportierst!",
+  "teleportblock.message.named": "Verbindung benannt: %s",
+  "teleportblock.message.linked_to_waystone": "Verbunden mit Wegstein: %s",
+  "teleportblock.message.waystone_not_found": "Wegstein nicht gefunden",
+  "teleportblock.message.waystone_lost": "Der verbundene Wegstein existiert nicht mehr",
+  "teleportblock.message.no_pending_block": "Zuerst Shift+RMT auf einen Teleportblock, dann auf einen Wegstein",
+  "teleportblock.message.chunk_protected": "Dieser Chunk ist geschützt!",
+
   "teleportblock.ponder.linking.header": "Blöcke verbinden",
   "teleportblock.ponder.linking.text_1": "Shift+RMT auf den ersten Block um die Verbindung zu beginnen",
   "teleportblock.ponder.linking.text_2": "Shift+RMT auf den zweiten Block um die Verbindung abzuschließen",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Teleportieren",
   "teleportblock.ponder.teleporting.text_1": "RMT um zum verbundenen Block zu teleportieren",
   "teleportblock.ponder.teleporting.text_2": "Die maximale Reichweite ist in der Konfigurationsdatei einstellbar",
-  "teleportblock.message.dismount": "Du musst absteigen bevor du teleportierst!",
+
+  "teleportblock.jei.description": "Teleportiert Spieler zu einem verbundenen Block. Shift+RMT auf zwei Blöcke um sie zu verbinden. Maximale Reichweite ist konfigurierbar.",
+
+  "teleportblock.jade.not_linked": "Nicht verbunden",
   "teleportblock.jade.linked": "Verbunden",
   "teleportblock.jade.linked_waystone": "Wegstein",
-  "teleportblock.message.linked_to_waystone": "Verbunden mit Wegstein: %s",
-  "teleportblock.message.waystone_not_found": "Wegstein nicht gefunden",
-  "teleportblock.message.waystone_lost": "Der verbundene Wegstein existiert nicht mehr",
-  "teleportblock.message.no_pending_block": "Zuerst Shift+RMT auf einen Teleportblock, dann auf einen Wegstein",
-  "teleportblock.jei.description": "Teleportiert Spieler zu einem verbundenen Block. Shift+RMT auf zwei Blöcke um sie zu verbinden. Maximale Reichweite ist konfigurierbar.",
-  "teleportblock.jade.not_linked": "Nicht verbunden"
+
+  "advancement.teleportblock.root.title": "Teleportblock",
+  "advancement.teleportblock.root.description": "Stelle einen Teleportblock her",
+  "advancement.teleportblock.link_blocks.title": "Verbunden",
+  "advancement.teleportblock.link_blocks.description": "Verbinde zwei Teleportblöcke",
+  "advancement.teleportblock.first_teleport.title": "Sprung des Glaubens",
+  "advancement.teleportblock.first_teleport.description": "Teleportiere dich zum ersten Mal",
+  "advancement.teleportblock.long_jump.title": "Weitsprung",
+  "advancement.teleportblock.long_jump.description": "Teleportiere dich 10 Mal",
+  "advancement.teleportblock.traveler.title": "Reisender",
+  "advancement.teleportblock.traveler.description": "Teleportiere dich 100 Mal",
+
+  "stat.teleportblock.teleportations": "Teleportationen"
 }

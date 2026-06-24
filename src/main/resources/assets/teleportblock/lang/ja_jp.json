@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "テレポートブロック",
+
   "teleportblock.message.cannot_self_link": "ブロックを自分自身にリンクすることはできません！",
   "teleportblock.message.first_selected": "最初のブロックを選択しました。2番目のブロックにShift+右クリックしてください。",
   "teleportblock.message.linked": "ブロックがリンクされました！",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "経路がふさがれています！アンカーの上2マスを空けてください。",
   "teleportblock.message.not_linked": "ブロックがリンクされていません！Shift+右クリックでリンクしてください。",
   "teleportblock.message.cooldown": "クールダウン中！%s 秒お待ちください。",
+  "teleportblock.message.dismount": "テレポートする前に乗り物から降りてください！",
+  "teleportblock.message.named": "リンク名設定: %s",
+  "teleportblock.message.linked_to_waystone": "ウェイストーンにリンク済み：%s",
+  "teleportblock.message.waystone_not_found": "ウェイストーンが見つかりません",
+  "teleportblock.message.waystone_lost": "リンクされたウェイストーンはもう存在しません",
+  "teleportblock.message.no_pending_block": "最初にテレポートブロックをShift+右クリックしてから、ウェイストーンに使用してください",
+  "teleportblock.message.chunk_protected": "このチャンクは保護されています！",
+
   "teleportblock.ponder.linking.header": "ブロックのリンク",
   "teleportblock.ponder.linking.text_1": "最初のブロックにShift+右クリックしてリンクを開始する",
   "teleportblock.ponder.linking.text_2": "2番目のブロックにShift+右クリックしてリンクを完了する",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "テレポート",
   "teleportblock.ponder.teleporting.text_1": "右クリックでリンクされたブロックにテレポートする",
   "teleportblock.ponder.teleporting.text_2": "最大距離はコンフィグファイルで変更できます",
-  "teleportblock.message.dismount": "テレポートする前に乗り物から降りてください！",
+
+  "teleportblock.jei.description": "プレイヤーをリンクされたブロックにテレポートします。2つのブロックをShift+右クリックしてリンクしてください。最大距離は設定で変更できます。",
+
+  "teleportblock.jade.not_linked": "未リンク",
   "teleportblock.jade.linked": "リンク済み",
   "teleportblock.jade.linked_waystone": "ウェイストーン",
-  "teleportblock.message.linked_to_waystone": "ウェイストーンにリンク済み：%s",
-  "teleportblock.message.waystone_not_found": "ウェイストーンが見つかりません",
-  "teleportblock.message.waystone_lost": "リンクされたウェイストーンはもう存在しません",
-  "teleportblock.message.no_pending_block": "最初にテレポートブロックをShift+右クリックしてから、ウェイストーンに使用してください",
-  "teleportblock.jei.description": "プレイヤーをリンクされたブロックにテレポートします。2つのブロックをShift+右クリックしてリンクしてください。最大距離は設定で変更できます。",
-  "teleportblock.jade.not_linked": "未リンク"
+
+  "advancement.teleportblock.root.title": "テレポートブロック",
+  "advancement.teleportblock.root.description": "テレポートブロックをクラフトする",
+  "advancement.teleportblock.link_blocks.title": "接続完了",
+  "advancement.teleportblock.link_blocks.description": "2つのテレポートブロックをリンクする",
+  "advancement.teleportblock.first_teleport.title": "信念の跳躍",
+  "advancement.teleportblock.first_teleport.description": "初めてテレポートする",
+  "advancement.teleportblock.long_jump.title": "遠距離ジャンプ",
+  "advancement.teleportblock.long_jump.description": "10回テレポートする",
+  "advancement.teleportblock.traveler.title": "旅人",
+  "advancement.teleportblock.traveler.description": "100回テレポートする",
+
+  "stat.teleportblock.teleportations": "テレポート回数"
 }

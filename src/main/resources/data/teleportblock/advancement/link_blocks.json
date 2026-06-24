@@ -1,0 +1,17 @@
+{
+  "display": {
+    "icon": { "id": "minecraft:ender_eye" },
+    "title": { "translate": "advancement.teleportblock.link_blocks.title" },
+    "description": { "translate": "advancement.teleportblock.link_blocks.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "teleportblock:root",
+  "criteria": {
+    "link": {
+      "trigger": "teleportblock:link"
+    }
+  }
+}

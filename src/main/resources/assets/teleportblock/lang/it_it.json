@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Blocco di Teletrasporto",
+
   "teleportblock.message.cannot_self_link": "Non è possibile collegare un blocco a se stesso!",
   "teleportblock.message.first_selected": "Primo blocco selezionato. Shift+Tasto destro sul secondo blocco.",
   "teleportblock.message.linked": "Blocchi collegati!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Percorso bloccato! Libera 2 blocchi sopra l'ancora.",
   "teleportblock.message.not_linked": "Il blocco non è collegato! Usa Shift+Tasto destro per collegarlo.",
   "teleportblock.message.cooldown": "Ricarica! Attendi %s secondo/i.",
+  "teleportblock.message.dismount": "Devi smontare prima di teletrasportarti!",
+  "teleportblock.message.named": "Collegamento rinominato: %s",
+  "teleportblock.message.linked_to_waystone": "Collegato alla pietra di viaggio: %s",
+  "teleportblock.message.waystone_not_found": "Pietra di viaggio non trovata",
+  "teleportblock.message.waystone_lost": "La pietra di viaggio collegata non esiste più",
+  "teleportblock.message.no_pending_block": "Prima usa Shift+Tasto destro su un Blocco di Teletrasporto, poi usalo su una Pietra di Viaggio",
+  "teleportblock.message.chunk_protected": "Questo chunk è protetto!",
+
   "teleportblock.ponder.linking.header": "Collegare i Blocchi",
   "teleportblock.ponder.linking.text_1": "Shift+Tasto destro sul primo blocco per iniziare il collegamento",
   "teleportblock.ponder.linking.text_2": "Shift+Tasto destro sul secondo blocco per completare il collegamento",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Teletrasporto",
   "teleportblock.ponder.teleporting.text_1": "Tasto destro per teletrasportarsi al blocco collegato",
   "teleportblock.ponder.teleporting.text_2": "La distanza massima è configurabile nel file di configurazione",
-  "teleportblock.message.dismount": "Devi smontare prima di teletrasportarti!",
+
+  "teleportblock.jei.description": "Teletrasporta i giocatori a un blocco collegato. Shift+Tasto destro su due blocchi per collegarli. La distanza massima è configurabile.",
+
+  "teleportblock.jade.not_linked": "Non collegato",
   "teleportblock.jade.linked": "Collegato",
   "teleportblock.jade.linked_waystone": "Pietra di Viaggio",
-  "teleportblock.message.linked_to_waystone": "Collegato alla pietra di viaggio: %s",
-  "teleportblock.message.waystone_not_found": "Pietra di viaggio non trovata",
-  "teleportblock.message.waystone_lost": "La pietra di viaggio collegata non esiste più",
-  "teleportblock.message.no_pending_block": "Prima usa Shift+Tasto destro su un Blocco di Teletrasporto, poi usalo su una Pietra di Viaggio",
-  "teleportblock.jei.description": "Teletrasporta i giocatori a un blocco collegato. Shift+Tasto destro su due blocchi per collegarli. La distanza massima è configurabile.",
-  "teleportblock.jade.not_linked": "Non collegato"
+
+  "advancement.teleportblock.root.title": "Blocco Teleporto",
+  "advancement.teleportblock.root.description": "Costruisci un Blocco Teleporto",
+  "advancement.teleportblock.link_blocks.title": "Collegato",
+  "advancement.teleportblock.link_blocks.description": "Collega due Blocchi Teleporto",
+  "advancement.teleportblock.first_teleport.title": "Salto della Fede",
+  "advancement.teleportblock.first_teleport.description": "Teletrasportati per la prima volta",
+  "advancement.teleportblock.long_jump.title": "Salto Lungo",
+  "advancement.teleportblock.long_jump.description": "Teletrasportati 10 volte",
+  "advancement.teleportblock.traveler.title": "Viaggiatore",
+  "advancement.teleportblock.traveler.description": "Teletrasportati 100 volte",
+
+  "stat.teleportblock.teleportations": "Teletrasporti"
 }

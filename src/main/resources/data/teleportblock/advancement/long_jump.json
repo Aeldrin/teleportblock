@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "id": "minecraft:spyglass" },
+    "title": { "translate": "advancement.teleportblock.long_jump.title" },
+    "description": { "translate": "advancement.teleportblock.long_jump.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "parent": "teleportblock:first_teleport",
+  "criteria": {
+    "long_jump": {
+      "trigger": "teleportblock:teleport",
+      "conditions": { "teleport_count": { "min": 10 } }
+    }
+  }
+}

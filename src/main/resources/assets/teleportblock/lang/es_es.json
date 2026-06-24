@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Bloque de Teletransporte",
+
   "teleportblock.message.cannot_self_link": "¡No se puede vincular un bloque consigo mismo!",
   "teleportblock.message.first_selected": "Primer bloque seleccionado. Shift+Clic derecho en el segundo bloque.",
   "teleportblock.message.linked": "¡Bloques vinculados!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "¡Camino bloqueado! Libera 2 bloques encima del ancla.",
   "teleportblock.message.not_linked": "¡El bloque no está vinculado! Usa Shift+Clic derecho para vincularlo.",
   "teleportblock.message.cooldown": "¡Recarga! Espera %s segundo(s).",
+  "teleportblock.message.dismount": "¡Debes desmontarte antes de teletransportarte!",
+  "teleportblock.message.named": "Enlace nombrado: %s",
+  "teleportblock.message.linked_to_waystone": "Vinculado a la piedra de camino: %s",
+  "teleportblock.message.waystone_not_found": "Piedra de camino no encontrada",
+  "teleportblock.message.waystone_lost": "La piedra de camino vinculada ya no existe",
+  "teleportblock.message.no_pending_block": "Primero usa Shift+Clic derecho en un Bloque de Teletransporte, luego úsalo en una Piedra de camino",
+  "teleportblock.message.chunk_protected": "¡Este fragmento está protegido!",
+
   "teleportblock.ponder.linking.header": "Vincular bloques",
   "teleportblock.ponder.linking.text_1": "Shift+Clic derecho en el primer bloque para iniciar el vínculo",
   "teleportblock.ponder.linking.text_2": "Shift+Clic derecho en el segundo bloque para completar el vínculo",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Teletransporte",
   "teleportblock.ponder.teleporting.text_1": "Clic derecho para teletransportarse al bloque vinculado",
   "teleportblock.ponder.teleporting.text_2": "El alcance máximo es configurable en el archivo de configuración",
-  "teleportblock.message.dismount": "¡Debes desmontarte antes de teletransportarte!",
+
+  "teleportblock.jei.description": "Teletransporta jugadores a un bloque vinculado. Shift+Clic derecho en dos bloques para vincularlos. El alcance máximo es configurable.",
+
+  "teleportblock.jade.not_linked": "No vinculado",
   "teleportblock.jade.linked": "Vinculado",
   "teleportblock.jade.linked_waystone": "Piedra de camino",
-  "teleportblock.message.linked_to_waystone": "Vinculado a la piedra de camino: %s",
-  "teleportblock.message.waystone_not_found": "Piedra de camino no encontrada",
-  "teleportblock.message.waystone_lost": "La piedra de camino vinculada ya no existe",
-  "teleportblock.message.no_pending_block": "Primero usa Shift+Clic derecho en un Bloque de Teletransporte, luego úsalo en una Piedra de camino",
-  "teleportblock.jei.description": "Teletransporta jugadores a un bloque vinculado. Shift+Clic derecho en dos bloques para vincularlos. El alcance máximo es configurable.",
-  "teleportblock.jade.not_linked": "No vinculado"
+
+  "advancement.teleportblock.root.title": "Bloque de Teletransporte",
+  "advancement.teleportblock.root.description": "Fabrica un Bloque de Teletransporte",
+  "advancement.teleportblock.link_blocks.title": "Conectado",
+  "advancement.teleportblock.link_blocks.description": "Conecta dos Bloques de Teletransporte",
+  "advancement.teleportblock.first_teleport.title": "Salto de Fe",
+  "advancement.teleportblock.first_teleport.description": "Teletranspórtate por primera vez",
+  "advancement.teleportblock.long_jump.title": "Salto Largo",
+  "advancement.teleportblock.long_jump.description": "Teletranspórtate 10 veces",
+  "advancement.teleportblock.traveler.title": "Viajero",
+  "advancement.teleportblock.traveler.description": "Teletranspórtate 100 veces"
+
+  "stat.teleportblock.teleportations": "Teletransportes"
 }

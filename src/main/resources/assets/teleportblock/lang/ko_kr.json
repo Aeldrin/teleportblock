@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "텔레포트 블록",
+
   "teleportblock.message.cannot_self_link": "블록을 자기 자신과 연결할 수 없습니다!",
   "teleportblock.message.first_selected": "첫 번째 블록이 선택되었습니다. 두 번째 블록에 Shift+우클릭 하세요.",
   "teleportblock.message.linked": "블록이 연결되었습니다!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "경로가 막혀 있습니다! 앵커 위 2칸을 비워주세요.",
   "teleportblock.message.not_linked": "블록이 연결되지 않았습니다! Shift+우클릭으로 연결하세요.",
   "teleportblock.message.cooldown": "재사용 대기 중! %s 초 기다려주세요.",
+  "teleportblock.message.dismount": "텔레포트하기 전에 탈것에서 내려야 합니다!",
+  "teleportblock.message.named": "링크 이름 설정: %s",
+  "teleportblock.message.linked_to_waystone": "웨이스톤에 연결됨: %s",
+  "teleportblock.message.waystone_not_found": "웨이스톤을 찾을 수 없습니다",
+  "teleportblock.message.waystone_lost": "연결된 웨이스톤이 더 이상 존재하지 않습니다",
+  "teleportblock.message.no_pending_block": "먼저 텔레포트 블록에 Shift+우클릭한 후 웨이스톤에 사용하세요",
+  "teleportblock.message.chunk_protected": "이 청크는 보호되어 있습니다!",
+
   "teleportblock.ponder.linking.header": "블록 연결하기",
   "teleportblock.ponder.linking.text_1": "첫 번째 블록에 Shift+우클릭하여 연결을 시작하세요",
   "teleportblock.ponder.linking.text_2": "두 번째 블록에 Shift+우클릭하여 연결을 완료하세요",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "텔레포트",
   "teleportblock.ponder.teleporting.text_1": "우클릭으로 연결된 블록으로 텔레포트하세요",
   "teleportblock.ponder.teleporting.text_2": "최대 거리는 설정 파일에서 변경할 수 있습니다",
-  "teleportblock.message.dismount": "텔레포트하기 전에 탈것에서 내려야 합니다!",
+
+  "teleportblock.jei.description": "플레이어를 연결된 블록으로 텔레포트합니다. 두 블록에 Shift+우클릭하여 연결하세요. 최대 거리는 설정에서 변경 가능합니다.",
+
+  "teleportblock.jade.not_linked": "연결되지 않음",
   "teleportblock.jade.linked": "연결됨",
   "teleportblock.jade.linked_waystone": "웨이스톤",
-  "teleportblock.message.linked_to_waystone": "웨이스톤에 연결됨: %s",
-  "teleportblock.message.waystone_not_found": "웨이스톤을 찾을 수 없습니다",
-  "teleportblock.message.waystone_lost": "연결된 웨이스톤이 더 이상 존재하지 않습니다",
-  "teleportblock.message.no_pending_block": "먼저 텔레포트 블록에 Shift+우클릭한 후 웨이스톤에 사용하세요",
-  "teleportblock.jei.description": "플레이어를 연결된 블록으로 텔레포트합니다. 두 블록에 Shift+우클릭하여 연결하세요. 최대 거리는 설정에서 변경 가능합니다.",
-  "teleportblock.jade.not_linked": "연결되지 않음"
+
+  "advancement.teleportblock.root.title": "텔레포트 블록",
+  "advancement.teleportblock.root.description": "텔레포트 블록을 제작하세요",
+  "advancement.teleportblock.link_blocks.title": "연결됨",
+  "advancement.teleportblock.link_blocks.description": "두 텔레포트 블록을 연결하세요",
+  "advancement.teleportblock.first_teleport.title": "믿음의 도약",
+  "advancement.teleportblock.first_teleport.description": "처음으로 텔레포트하세요",
+  "advancement.teleportblock.long_jump.title": "멀리 뛰기",
+  "advancement.teleportblock.long_jump.description": "10번 텔레포트하세요",
+  "advancement.teleportblock.traveler.title": "여행자",
+  "advancement.teleportblock.traveler.description": "100번 텔레포트하세요",
+
+  "stat.teleportblock.teleportations": "텔레포트 횟수"
 }

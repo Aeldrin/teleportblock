@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Блок телепортации",
+
   "teleportblock.message.cannot_self_link": "Нельзя связать блок с самим собой!",
   "teleportblock.message.first_selected": "Первый блок выбран. Shift+ПКМ на второй блок.",
   "teleportblock.message.linked": "Блоки связаны!",
@@ -9,8 +10,13 @@
   "teleportblock.message.not_linked": "Блок не связан! Используй Shift+ПКМ для связки.",
   "teleportblock.message.cooldown": "Перезарядка! Подожди %s сек.",
   "teleportblock.message.dismount": "Сначала спешись!",
-  "teleportblock.jade.linked": "Связан",
-  "teleportblock.jade.linked_waystone": "Путеводный камень",
+  "teleportblock.message.named": "Связь названа: %s",
+  "teleportblock.message.linked_to_waystone": "Связан с Путеводным камнем: %s",
+  "teleportblock.message.waystone_not_found": "Путеводный камень не найден",
+  "teleportblock.message.waystone_lost": "Связанный Путеводный камень больше не существует",
+  "teleportblock.message.no_pending_block": "Сначала Shift-ПКМ на Блок телепортации, затем используй это на Путеводном камне",
+  "teleportblock.message.chunk_protected": "Этот чанк защищён!",
+
   "teleportblock.ponder.linking.header": "Связка блоков",
   "teleportblock.ponder.linking.text_1": "Shift-ПКМ по первому блоку чтобы начать связку",
   "teleportblock.ponder.linking.text_2": "Shift-ПКМ по второму блоку чтобы завершить связку",
@@ -18,10 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Телепортация",
   "teleportblock.ponder.teleporting.text_1": "ПКМ чтобы телепортироваться к связанному блоку",
   "teleportblock.ponder.teleporting.text_2": "Максимальная дальность настраивается в конфиг файле",
-  "teleportblock.message.linked_to_waystone": "Связан с Путеводным камнем: %s",
-  "teleportblock.message.waystone_not_found": "Путеводный камень не найден",
-  "teleportblock.message.waystone_lost": "Связанный Путеводный камень больше не существует",
-  "teleportblock.message.no_pending_block": "Сначала Shift-ПКМ на Блок телепортации, затем используй это на Путеводном камне",
+
   "teleportblock.jei.description": "Телепортирует игроков к связанному блоку. Shift-ПКМ по двум блокам чтобы связать их. Максимальная дальность настраивается в конфиге.",
-  "teleportblock.jade.not_linked": "Не связан"
+
+  "teleportblock.jade.not_linked": "Не связан",
+  "teleportblock.jade.linked": "Связан",
+  "teleportblock.jade.linked_waystone": "Путеводный камень",
+
+  "advancement.teleportblock.root.title": "Блок Телепорта",
+  "advancement.teleportblock.root.description": "Скрафти блок телепорта",
+  "advancement.teleportblock.link_blocks.title": "Связь установлена",
+  "advancement.teleportblock.link_blocks.description": "Свяжи два блока телепорта",
+  "advancement.teleportblock.first_teleport.title": "Прыжок веры",
+  "advancement.teleportblock.first_teleport.description": "Телепортируйся первый раз",
+  "advancement.teleportblock.long_jump.title": "Дальний прыжок",
+  "advancement.teleportblock.long_jump.description": "Телепортируйся 10 раз",
+  "advancement.teleportblock.traveler.title": "Путешественник",
+  "advancement.teleportblock.traveler.description": "Телепортируйся 100 раз",
+
+  "stat.teleportblock.teleportations": "Телепортации"
 }

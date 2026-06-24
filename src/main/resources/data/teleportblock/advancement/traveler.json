@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "id": "minecraft:map" },
+    "title": { "translate": "advancement.teleportblock.traveler.title" },
+    "description": { "translate": "advancement.teleportblock.traveler.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "parent": "teleportblock:first_teleport",
+  "criteria": {
+    "traveler": {
+      "trigger": "teleportblock:teleport",
+      "conditions": { "teleport_count": { "min": 100 } }
+    }
+  }
+}

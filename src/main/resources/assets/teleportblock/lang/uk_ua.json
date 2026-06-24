@@ -1,5 +1,6 @@
 {
   "block.teleportblock.teleport_block": "Блок телепортації",
+
   "teleportblock.message.cannot_self_link": "Не можна зв'язати блок із самим собою!",
   "teleportblock.message.first_selected": "Перший блок обрано. Shift+ПКМ на другий блок.",
   "teleportblock.message.linked": "Блоки зв'язано!",
@@ -8,6 +9,14 @@
   "teleportblock.message.blocked": "Шлях заблоковано! Звільни 2 блоки над якорем.",
   "teleportblock.message.not_linked": "Блок не зв'язано! Використай Shift+ПКМ для зв'язку.",
   "teleportblock.message.cooldown": "Перезарядка! Зачекай %s секунд(и).",
+  "teleportblock.message.dismount": "Спочатку злізь з транспорту!",
+  "teleportblock.message.named": "Зв'язок названо: %s",
+  "teleportblock.message.linked_to_waystone": "Зв'язано з путнім каменем: %s",
+  "teleportblock.message.waystone_not_found": "Путній камінь не знайдено",
+  "teleportblock.message.waystone_lost": "Зв'язаний путній камінь більше не існує",
+  "teleportblock.message.no_pending_block": "Спочатку Shift+ПКМ на Блок телепортації, потім використай на путньому камені",
+  "teleportblock.message.chunk_protected": "Цей чанк захищений!",
+
   "teleportblock.ponder.linking.header": "Зв'язування блоків",
   "teleportblock.ponder.linking.text_1": "Shift+ПКМ на перший блок щоб почати зв'язування",
   "teleportblock.ponder.linking.text_2": "Shift+ПКМ на другий блок щоб завершити зв'язування",
@@ -15,13 +24,23 @@
   "teleportblock.ponder.teleporting.header": "Телепортація",
   "teleportblock.ponder.teleporting.text_1": "ПКМ щоб телепортуватись до зв'язаного блоку",
   "teleportblock.ponder.teleporting.text_2": "Максимальна відстань налаштовується у файлі конфігурації",
-  "teleportblock.message.dismount": "Спочатку злізь з транспорту!",
+
+  "teleportblock.jei.description": "Телепортує гравців до зв'язаного блоку. Shift+ПКМ на два блоки щоб їх зв'язати. Максимальна відстань налаштовується.",
+
+  "teleportblock.jade.not_linked": "Не зв'язано",
   "teleportblock.jade.linked": "Зв'язано",
   "teleportblock.jade.linked_waystone": "Путній камінь",
-  "teleportblock.message.linked_to_waystone": "Зв'язано з путнім каменем: %s",
-  "teleportblock.message.waystone_not_found": "Путній камінь не знайдено",
-  "teleportblock.message.waystone_lost": "Зв'язаний путній камінь більше не існує",
-  "teleportblock.message.no_pending_block": "Спочатку Shift+ПКМ на Блок телепортації, потім використай на путньому камені",
-  "teleportblock.jei.description": "Телепортує гравців до зв'язаного блоку. Shift+ПКМ на два блоки щоб їх зв'язати. Максимальна відстань налаштовується.",
-  "teleportblock.jade.not_linked": "Не зв'язано"
+
+  "advancement.teleportblock.root.title": "Блок Телепортації",
+  "advancement.teleportblock.root.description": "Зроби блок телепортації",
+  "advancement.teleportblock.link_blocks.title": "Зв'язок встановлено",
+  "advancement.teleportblock.link_blocks.description": "Зв'яжи два блоки телепортації",
+  "advancement.teleportblock.first_teleport.title": "Стрибок Віри",
+  "advancement.teleportblock.first_teleport.description": "Телепортуйся вперше",
+  "advancement.teleportblock.long_jump.title": "Далекий стрибок",
+  "advancement.teleportblock.long_jump.description": "Телепортуйся 10 разів",
+  "advancement.teleportblock.traveler.title": "Мандрівник",
+  "advancement.teleportblock.traveler.description": "Телепортуйся 100 разів",
+
+  "stat.teleportblock.teleportations": "Телепортації"
 }
