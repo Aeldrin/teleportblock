@@ -15,7 +15,9 @@
   "teleportblock.message.waystone_not_found": "Nie znaleziono kamienia drogi",
   "teleportblock.message.waystone_lost": "Połączony kamień drogi już nie istnieje",
   "teleportblock.message.no_pending_block": "Najpierw użyj Shift+PPM na Blok Teleportacji, a następnie użyj go na Kamieniu Drogi",
-  "teleportblock.message.chunk_protected": "Este chunk está protegido!",
+  "teleportblock.message.chunk_protected": "Ten chunk jest chroniony!",
+  "teleportblock.message.passive_enabled": "Tryb pasywny włączony - wejdź na blok, aby się teleportować",
+  "teleportblock.message.passive_disabled": "Tryb pasywny wyłączony - użyj PPM, aby się teleportować",
 
   "teleportblock.ponder.linking.header": "Łączenie Bloków",
   "teleportblock.ponder.linking.text_1": "Shift+PPM na pierwszy blok aby rozpocząć łączenie",

@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "La pierre de passage liée n'existe plus",
   "teleportblock.message.no_pending_block": "Shift+Clic droit sur un Bloc de téléportation d'abord, puis utilise-le sur une Pierre de passage",
   "teleportblock.message.chunk_protected": "Ce chunk est protégé!",
+  "teleportblock.message.passive_enabled": "Mode passif activé - marche sur le bloc pour te téléporter",
+  "teleportblock.message.passive_disabled": "Mode passif désactivé - clic droit pour te téléporter",
 
   "teleportblock.ponder.linking.header": "Lier des blocs",
   "teleportblock.ponder.linking.text_1": "Shift+Clic droit sur le premier bloc pour commencer la liaison",

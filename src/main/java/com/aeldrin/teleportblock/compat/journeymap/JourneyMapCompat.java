@@ -4,6 +4,7 @@ import journeymap.api.v2.client.IClientAPI;
 import journeymap.api.v2.common.waypoint.Waypoint;
 import journeymap.api.v2.common.waypoint.WaypointFactory;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +22,8 @@ public class JourneyMapCompat {
     }
 
     public static void updateWaypoint(BlockPos pos, @Nullable BlockPos target,
-                                       int color, @Nullable String name) {
+                                       int color, @Nullable String name,
+                                       ResourceKey<Level> dimension) {
         if (api == null) return;
         removeWaypoint(pos);
         if (target == null) return;
@@ -33,7 +35,7 @@ public class JourneyMapCompat {
                     MOD_ID,
                     pos,
                     displayName,
-                    Level.OVERWORLD,
+                    dimension,
                     false  // non-persistent, we manage lifecycle ourselves
             );
             wp.setColor(color);

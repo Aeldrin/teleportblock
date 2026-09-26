@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "リンクされたウェイストーンはもう存在しません",
   "teleportblock.message.no_pending_block": "最初にテレポートブロックをShift+右クリックしてから、ウェイストーンに使用してください",
   "teleportblock.message.chunk_protected": "このチャンクは保護されています！",
+  "teleportblock.message.passive_enabled": "パッシブモード有効 - ブロックの上に乗るとテレポートします",
+  "teleportblock.message.passive_disabled": "パッシブモード無効 - 右クリックでテレポートします",
 
   "teleportblock.ponder.linking.header": "ブロックのリンク",
   "teleportblock.ponder.linking.text_1": "最初のブロックにShift+右クリックしてリンクを開始する",

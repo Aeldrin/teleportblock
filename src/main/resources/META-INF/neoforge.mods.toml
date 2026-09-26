@@ -4,9 +4,10 @@ license = "MIT"
 
 [[mods]]
 modId = "teleportblock"
-version = "1.0.0"
+version = "${mod_version}"
 displayName = "Teleport Block"
-description = "A block that teleports players."
+logoFile = "logo.png"
+description = '''A simple block that teleports players to a linked block. Shift-click two blocks to link them, right-click to teleport. Supports Name Tags, vanilla maps, Ender Pearls, JourneyMap, Jade, and more.'''
 
 [[dependencies.teleportblock]]
 modId = "neoforge"

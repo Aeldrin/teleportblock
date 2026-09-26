@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "연결된 웨이스톤이 더 이상 존재하지 않습니다",
   "teleportblock.message.no_pending_block": "먼저 텔레포트 블록에 Shift+우클릭한 후 웨이스톤에 사용하세요",
   "teleportblock.message.chunk_protected": "이 청크는 보호되어 있습니다!",
+  "teleportblock.message.passive_enabled": "패시브 모드 활성화 - 블록을 밟으면 텔레포트됩니다",
+  "teleportblock.message.passive_disabled": "패시브 모드 비활성화 - 우클릭으로 텔레포트하세요",
 
   "teleportblock.ponder.linking.header": "블록 연결하기",
   "teleportblock.ponder.linking.text_1": "첫 번째 블록에 Shift+우클릭하여 연결을 시작하세요",

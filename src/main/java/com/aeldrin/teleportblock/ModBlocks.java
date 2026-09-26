@@ -1,7 +1,6 @@
 package com.aeldrin.teleportblock;
 
 import com.aeldrin.teleportblock.block.TeleportBlock;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;

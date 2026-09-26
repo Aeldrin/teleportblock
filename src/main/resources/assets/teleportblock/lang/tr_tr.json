@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "Bağlı yol taşı artık mevcut değil",
   "teleportblock.message.no_pending_block": "Önce bir Işınlanma Bloğuna Shift+Sağ tık yapın, ardından bir Yol Taşında kullanın",
   "teleportblock.message.chunk_protected": "Bu chunk korunuyor!",
+  "teleportblock.message.passive_enabled": "Pasif mod etkinleştirildi - ışınlanmak için bloğun üzerine bas",
+  "teleportblock.message.passive_disabled": "Pasif mod devre dışı - ışınlanmak için sağ tık kullan",
 
   "teleportblock.ponder.linking.header": "Blok Bağlama",
   "teleportblock.ponder.linking.text_1": "Bağlamaya başlamak için ilk bloğa Shift+Sağ tık yapın",

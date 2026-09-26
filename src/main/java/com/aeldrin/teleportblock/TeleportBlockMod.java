@@ -29,6 +29,7 @@ public class TeleportBlockMod {
 
         modEventBus.addListener(ModEventHandlers::onCreativeTab);
         NeoForge.EVENT_BUS.addListener(GameEventHandlers::onExplosion);
+        NeoForge.EVENT_BUS.addListener(ModEventHandlers::onPlayerLoggedOut);
 
         modEventBus.addListener((FMLClientSetupEvent event) -> {
             if (net.neoforged.fml.loading.FMLEnvironment.dist == Dist.CLIENT) {

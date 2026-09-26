@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "Связанный Путеводный камень больше не существует",
   "teleportblock.message.no_pending_block": "Сначала Shift-ПКМ на Блок телепортации, затем используй это на Путеводном камне",
   "teleportblock.message.chunk_protected": "Этот чанк защищён!",
+  "teleportblock.message.passive_enabled": "Пассивный режим включён - наступи на блок для телепорта",
+  "teleportblock.message.passive_disabled": "Пассивный режим выключен - используй ПКМ для телепорта",
 
   "teleportblock.ponder.linking.header": "Связка блоков",
   "teleportblock.ponder.linking.text_1": "Shift-ПКМ по первому блоку чтобы начать связку",

@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "已连接的路径石不再存在",
   "teleportblock.message.no_pending_block": "请先对传送方块使用Shift右键，然后再对路径石使用",
   "teleportblock.message.chunk_protected": "该区块受到保护！",
+  "teleportblock.message.passive_enabled": "被动模式已启用 - 踩在方块上即可传送",
+  "teleportblock.message.passive_disabled": "被动模式已禁用 - 右键点击进行传送",
 
   "teleportblock.ponder.linking.header": "连接方块",
   "teleportblock.ponder.linking.text_1": "按住Shift右键点击第一个方块开始连接",

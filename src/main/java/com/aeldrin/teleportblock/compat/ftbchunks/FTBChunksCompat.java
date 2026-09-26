@@ -15,8 +15,6 @@ public class FTBChunksCompat {
         ChunkDimPos chunkDimPos = new ChunkDimPos(level.dimension(), chunkPos.x, chunkPos.z);
         ClaimedChunk chunk = FTBChunksAPI.api().getManager().getChunk(chunkDimPos);
 
-        System.out.println("FTBChunks check: chunk=" + chunk + " pos=" + target);
-
         // Чанк не застолблен — телепорт разрешён
         if (chunk == null) return true;
 

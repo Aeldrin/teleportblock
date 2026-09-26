@@ -7,9 +7,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -114,7 +111,7 @@ public class TeleportMapHandler {
         if (player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer)) return;
 
-        // Throttle: every 40 ticks (5 seconds)
+        // Throttle: every 100 ticks (5 seconds)
         if (player.tickCount % 100 != 0) return;
 
         // Check both hands + inventory for filled maps
@@ -139,19 +136,11 @@ public class TeleportMapHandler {
             String colorHex = String.format("%06X", marker.color() & 0xFFFFFF);
             String key = "tp_" + colorHex + "_" + marker.x() + "_" + marker.z();
 
-            // Build name component — ALWAYS carries color in style for the frame mixin
-            // Component.empty() with color style won't render text but carries tint data
-            Component name;
-            if (marker.name() != null) {
-                name = Component.literal(marker.name())
-                        .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(marker.color())));
-            } else {
-                name = Component.empty()
-                        .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(marker.color())));
-            }
-
+            // name = null — полностью убирает плашку под иконкой на карте.
+            // Плашка (даже с коротким именем) слишком крупная и перекрывает
+            // содержимое карты, делая её нечитаемой при нескольких маркерах.
             mapData.addDecoration(holder, null, key,
-                    (double) marker.x(), (double) marker.z(), 0.0, name);
+                    (double) marker.x(), (double) marker.z(), 0.0, null);
         }
     }
 }

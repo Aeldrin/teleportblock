@@ -82,8 +82,32 @@ public class TeleportBlockEntity extends BlockEntity {
 
     public boolean hasLinkColor() { return linkColor != -1; }
 
-    // === Unique color tracking ===
+    // === Unique color tracking (best-effort, per-session) ===
+    // Не переживает перезагрузку сервера и не видит блоки в незагруженных чанках -
+    // это осознанное ограничение, а не баг: на 16M цветов коллизия практически
+    // невозможна, а полная персистенция потребовала бы world-saved-data и трекинга
+    // загрузки/выгрузки чанков, что не стоит сложности.
     private static final java.util.Set<Integer> USED_COLORS = java.util.Collections.synchronizedSet(new java.util.HashSet<>());
+
+    // Собственная реализация HSB->RGB, не зависит от java.awt (которого может
+    // не быть на headless dedicated серверах с урезанной JVM).
+    private static int hsbToRgb(float hue, float saturation, float brightness) {
+        float h = (hue - (float) Math.floor(hue)) * 6.0f;
+        float f = h - (float) Math.floor(h);
+        float p = brightness * (1.0f - saturation);
+        float q = brightness * (1.0f - saturation * f);
+        float t = brightness * (1.0f - saturation * (1.0f - f));
+        int r, g, b;
+        switch ((int) h) {
+            case 0 -> { r = Math.round(brightness * 255); g = Math.round(t * 255); b = Math.round(p * 255); }
+            case 1 -> { r = Math.round(q * 255); g = Math.round(brightness * 255); b = Math.round(p * 255); }
+            case 2 -> { r = Math.round(p * 255); g = Math.round(brightness * 255); b = Math.round(t * 255); }
+            case 3 -> { r = Math.round(p * 255); g = Math.round(q * 255); b = Math.round(brightness * 255); }
+            case 4 -> { r = Math.round(t * 255); g = Math.round(p * 255); b = Math.round(brightness * 255); }
+            default -> { r = Math.round(brightness * 255); g = Math.round(p * 255); b = Math.round(q * 255); }
+        }
+        return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
+    }
 
     public static int generateRandomLinkColor() {
         java.util.concurrent.ThreadLocalRandom rng = java.util.concurrent.ThreadLocalRandom.current();
@@ -93,7 +117,7 @@ public class TeleportBlockEntity extends BlockEntity {
             float hue = rng.nextFloat();
             float saturation = 0.6f + rng.nextFloat() * 0.4f;
             float brightness = 0.7f + rng.nextFloat() * 0.3f;
-            color = java.awt.Color.HSBtoRGB(hue, saturation, brightness) & 0xFFFFFF;
+            color = hsbToRgb(hue, saturation, brightness);
             attempts++;
         } while (USED_COLORS.contains(color) && attempts < 1000);
         USED_COLORS.add(color);
@@ -197,6 +221,19 @@ public class TeleportBlockEntity extends BlockEntity {
         }
     }
 
+    // handleUpdateTag вызывается только при загрузке чанка (вход в мир).
+    // Для инкрементальных обновлений (sendBlockUpdated при линковке/отвязке)
+    // нужен onDataPacket — иначе вейпоинты появятся только после перезахода.
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net,
+                              net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket pkt,
+                              HolderLookup.Provider registries) {
+        super.onDataPacket(net, pkt, registries);
+        if (level != null && level.isClientSide()) {
+            updateMinimapWaypoints();
+        }
+    }
+
     @Override
     public void setRemoved() {
         if (level != null && level.isClientSide()) {
@@ -208,7 +245,7 @@ public class TeleportBlockEntity extends BlockEntity {
     private void updateMinimapWaypoints() {
         if (net.neoforged.fml.ModList.get().isLoaded("journeymap")) {
             com.aeldrin.teleportblock.compat.journeymap.JourneyMapCompat
-                    .updateWaypoint(worldPosition, target, linkColor, linkName);
+                    .updateWaypoint(worldPosition, target, linkColor, linkName, level.dimension());
         }
     }
 

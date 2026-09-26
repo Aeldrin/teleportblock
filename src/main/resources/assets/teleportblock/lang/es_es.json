@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "La piedra de camino vinculada ya no existe",
   "teleportblock.message.no_pending_block": "Primero usa Shift+Clic derecho en un Bloque de Teletransporte, luego úsalo en una Piedra de camino",
   "teleportblock.message.chunk_protected": "¡Este fragmento está protegido!",
+  "teleportblock.message.passive_enabled": "Modo pasivo activado - pisa el bloque para teletransportarte",
+  "teleportblock.message.passive_disabled": "Modo pasivo desactivado - clic derecho para teletransportarte",
 
   "teleportblock.ponder.linking.header": "Vincular bloques",
   "teleportblock.ponder.linking.text_1": "Shift+Clic derecho en el primer bloque para iniciar el vínculo",
@@ -40,7 +42,7 @@
   "advancement.teleportblock.long_jump.title": "Salto Largo",
   "advancement.teleportblock.long_jump.description": "Teletranspórtate 10 veces",
   "advancement.teleportblock.traveler.title": "Viajero",
-  "advancement.teleportblock.traveler.description": "Teletranspórtate 100 veces"
+  "advancement.teleportblock.traveler.description": "Teletranspórtate 100 veces",
 
   "stat.teleportblock.teleportations": "Teletransportes"
 }

@@ -8,6 +8,7 @@ public class ModConfig {
 
     public static final ModConfigSpec.IntValue MAX_LINK_DISTANCE;
     public static final ModConfigSpec.IntValue COOLDOWN_SECONDS;
+    public static final ModConfigSpec.IntValue PEARL_COOLDOWN_SECONDS;
 
     static {
         BUILDER.push("teleportblock");
@@ -17,8 +18,12 @@ public class ModConfig {
                 .defineInRange("max_link_distance", 1024, 1, 100000);
 
         COOLDOWN_SECONDS = BUILDER
-                .comment("Cooldown in seconds")
+                .comment("Cooldown in seconds between teleportations (per link pair)")
                 .defineInRange("cooldown_seconds", 2, 0, 3600);
+
+        PEARL_COOLDOWN_SECONDS = BUILDER
+                .comment("Cooldown in seconds for ender pearl teleportation through a linked block")
+                .defineInRange("pearl_cooldown_seconds", 1, 0, 3600);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "Der verbundene Wegstein existiert nicht mehr",
   "teleportblock.message.no_pending_block": "Zuerst Shift+RMT auf einen Teleportblock, dann auf einen Wegstein",
   "teleportblock.message.chunk_protected": "Dieser Chunk ist geschützt!",
+  "teleportblock.message.passive_enabled": "Passiver Modus aktiviert - betrete den Block zum Teleportieren",
+  "teleportblock.message.passive_disabled": "Passiver Modus deaktiviert - Rechtsklick zum Teleportieren",
 
   "teleportblock.ponder.linking.header": "Blöcke verbinden",
   "teleportblock.ponder.linking.text_1": "Shift+RMT auf den ersten Block um die Verbindung zu beginnen",

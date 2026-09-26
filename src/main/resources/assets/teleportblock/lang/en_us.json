@@ -16,6 +16,8 @@
   "teleportblock.message.waystone_lost": "Linked waystone no longer exists",
   "teleportblock.message.no_pending_block": "Shift-RMB a Teleport Block first, then use this on a Waystone",
   "teleportblock.message.chunk_protected": "This chunk is protected!",
+  "teleportblock.message.passive_enabled": "Passive mode enabled - step on the block to teleport",
+  "teleportblock.message.passive_disabled": "Passive mode disabled - right-click to teleport",
 
   "teleportblock.ponder.linking.header": "Linking Blocks",
   "teleportblock.ponder.linking.text_1": "Shift-RMB the first block to begin linking",
