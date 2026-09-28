@@ -1,6 +1,7 @@
 package com.aeldrin.teleportblock;
 
 import com.aeldrin.teleportblock.advancement.ModAdvancements;
+import com.aeldrin.teleportblock.client.TeleportBlockConfigScreen;
 import com.aeldrin.teleportblock.compat.ponder.TeleportBlockPonderPlugin;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.api.distmarker.Dist;
@@ -16,7 +17,16 @@ public class TeleportBlockMod {
     public static final String MODID = "teleportblock";
 
     public TeleportBlockMod(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(Type.COMMON, ModConfig.SPEC);
+        // Настройки 2.1: у каждой среды ровно один файл (подробности в ModConfig).
+        // Выделенный сервер - серверные настройки; клиент - настройки одиночной игры и экран
+        // настроек в списке модов. TeleportBlockConfigScreen - клиентский класс, поэтому
+        // вызывается только под проверкой Dist.CLIENT (на сервере он даже не загружается).
+        if (net.neoforged.fml.loading.FMLEnvironment.dist.isDedicatedServer()) {
+            modContainer.registerConfig(Type.COMMON, ModConfig.SERVER.spec, "teleportblock-server.toml");
+        } else {
+            modContainer.registerConfig(Type.COMMON, ModConfig.SINGLEPLAYER.spec, "teleportblock-singleplayer.toml");
+            TeleportBlockConfigScreen.register(modContainer);
+        }
         ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
@@ -30,9 +40,14 @@ public class TeleportBlockMod {
         modEventBus.addListener(ModEventHandlers::onCreativeTab);
         NeoForge.EVENT_BUS.addListener(GameEventHandlers::onExplosion);
         NeoForge.EVENT_BUS.addListener(ModEventHandlers::onPlayerLoggedOut);
+        NeoForge.EVENT_BUS.addListener(ModEventHandlers::onPlayerTick);
 
         modEventBus.addListener((FMLClientSetupEvent event) -> {
-            if (net.neoforged.fml.loading.FMLEnvironment.dist == Dist.CLIENT) {
+            // Ponder встроен в Create (jar-in-jar), в наш мод - нет (compileOnly). Без проверки
+            // isLoaded("ponder") клиент БЕЗ Create падал при загрузке: PonderIndex и
+            // TeleportBlockPonderPlugin (реализует интерфейс Ponder) не находились.
+            if (net.neoforged.fml.loading.FMLEnvironment.dist == Dist.CLIENT
+                    && net.neoforged.fml.ModList.get().isLoaded("ponder")) {
                 PonderIndex.addPlugin(new TeleportBlockPonderPlugin());
             }
         });

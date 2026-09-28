@@ -12,14 +12,14 @@ description = '''A simple block that teleports players to a linked block. Shift-
 [[dependencies.teleportblock]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1,)"
+versionRange = "[21.1,21.2)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.teleportblock]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,1.22)"
+versionRange = "[1.21.1]"
 ordering = "NONE"
 side = "BOTH"
 

@@ -58,15 +58,18 @@ public class TeleportBlockItem extends BlockItem {
         if (waystoneId == null) return super.useOn(context);
 
         UUID playerId = player.getUUID();
-        BlockPos pendingPos = TeleportBlock.getPendingLink(playerId);
 
-        if (pendingPos == null) {
+        if (!TeleportBlock.hasPendingLink(playerId)) {
             player.sendSystemMessage(
                 Component.translatable("teleportblock.message.no_pending_block"));
             return InteractionResult.SUCCESS;
         }
 
-        TeleportBlock.removePendingLink(playerId);
+        // Fix 2.0.1: takePendingLink проверяет, что первый блок в этом же измерении и не на
+        // выгруженном корабле (сообщение игроку отправляет сам). Раньше тут был голый BlockPos,
+        // и getBlockEntity ниже мог полезть в чанк другого измерения / плот-зону Sable.
+        BlockPos pendingPos = TeleportBlock.takePendingLink(player, level);
+        if (pendingPos == null) return InteractionResult.FAIL;
 
         TeleportBlockEntity be = (TeleportBlockEntity) level.getBlockEntity(pendingPos);
         if (be == null) {
@@ -74,6 +77,9 @@ public class TeleportBlockItem extends BlockItem {
                 Component.translatable("teleportblock.message.first_not_found"));
             return InteractionResult.FAIL;
         }
+
+        // Владелец (2.1, опция owner_only): чужую пару нельзя перелинковать на Waystone
+        if (!TeleportBlock.checkCanModify(player, be)) return InteractionResult.FAIL;
 
         BlockPos waystonePos = WaystoneCompat.getWaystonePos(serverLevel, waystoneId);
         if (waystonePos == null) {
@@ -83,6 +89,7 @@ public class TeleportBlockItem extends BlockItem {
         }
 
         be.setWaystoneTarget(waystoneId);
+        be.setOwner(player.getUUID());
         String waystoneName = WaystoneCompat.getWaystoneName(serverLevel, waystoneId);
         level.playSound(null, pendingPos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
         player.sendSystemMessage(

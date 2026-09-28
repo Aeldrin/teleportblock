@@ -26,6 +26,14 @@ public class TeleportBlockEntity extends BlockEntity {
     private String linkName;
     private int linkColor = -1;
 
+    // Владелец пары (2.1) - игрок, который её связал. Используется опцией owner_only в конфиге.
+    // Записывается всегда, даже если опция выключена, чтобы включение опции сразу работало для
+    // уже связанных пар. null = владельца нет (пара связана до 2.1 или связь разорвана) -
+    // такую пару может менять кто угодно. Логике нужен только на сервере (на клиент попадает лишь
+    // вместе с остальными данными блока через getUpdateTag - это безвредно).
+    @Nullable
+    private UUID owner;
+
     public TeleportBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TELEPORT_BLOCK_ENTITY.get(), pos, state);
     }
@@ -44,6 +52,25 @@ public class TeleportBlockEntity extends BlockEntity {
     public void setRealTarget(@Nullable BlockPos realTarget) {
         this.realTarget = realTarget;
         setChanged();
+    }
+
+    // Стоит ли партнёр на Sable sub-level - по данным, сохранённым при линковке:
+    // realTarget = глобальная проекция позиции партнёра на момент линковки. Для обычного
+    // наземного блока она совпадает с target, для блока на корабле - отличается (плот-координаты
+    // против мировых). Не требует вызовов API Sable и работает без установленного Sable
+    // (тогда проекция - no-op и realTarget всегда равен target).
+    public boolean isPartnerOnSubLevel() {
+        return target != null && realTarget != null && !realTarget.equals(target);
+    }
+
+    // Можно ли обращаться к блоку партнёра (getBlockState/getBlockEntity) из разовых действий
+    // игрока (переключение режима, имя, отвязка), не рискуя загрузить плот-чанк выгруженного
+    // корабля (issue #1). Наземного партнёра считаем доступным всегда: загрузить его чанк ради
+    // разового действия допустимо. Для фоновой логики (редстоун-реле) этого НЕ достаточно -
+    // там проверяется level.isLoaded(target) для любого партнёра.
+    public boolean canAccessPartner() {
+        if (target == null || level == null) return false;
+        return !isPartnerOnSubLevel() || level.isLoaded(target);
     }
 
     public @Nullable UUID getWaystoneTarget() { return waystoneTarget; }
@@ -81,6 +108,13 @@ public class TeleportBlockEntity extends BlockEntity {
     }
 
     public boolean hasLinkColor() { return linkColor != -1; }
+
+    public @Nullable UUID getOwner() { return owner; }
+
+    public void setOwner(@Nullable UUID owner) {
+        this.owner = owner;
+        setChanged();
+    }
 
     // === Unique color tracking (best-effort, per-session) ===
     // Не переживает перезагрузку сервера и не видит блоки в незагруженных чанках -
@@ -134,7 +168,8 @@ public class TeleportBlockEntity extends BlockEntity {
 
     public void setLinkNameWithSync(@Nullable String name) {
         this.setLinkName(name);
-        if (target != null && level != null && !level.isClientSide()) {
+        // canAccessPartner - см. выше: не грузим плот-чанк выгруженного корабля
+        if (target != null && level != null && !level.isClientSide() && canAccessPartner()) {
             BlockEntity paired = level.getBlockEntity(target);
             if (paired instanceof TeleportBlockEntity pairedBe) {
                 pairedBe.setLinkName(name);
@@ -187,6 +222,9 @@ public class TeleportBlockEntity extends BlockEntity {
         if (linkColor != -1) {
             tag.putInt("link_color", linkColor);
         }
+        if (owner != null) {
+            tag.putUUID("owner", owner);
+        }
     }
 
     @Override
@@ -210,6 +248,7 @@ public class TeleportBlockEntity extends BlockEntity {
         teleportCount = tag.getInt("teleport_count");
         linkName = tag.contains("link_name") ? tag.getString("link_name") : null;
         linkColor = tag.contains("link_color") ? tag.getInt("link_color") : -1;
+        owner = tag.hasUUID("owner") ? tag.getUUID("owner") : null;
         registerColor(linkColor);
     }
 
