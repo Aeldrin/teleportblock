@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Les deux blocs doivent être dans la même dimension !",
   "teleportblock.message.not_enough_xp": "Pas assez d'expérience ! Cette téléportation coûte %s points d'expérience.",
   "teleportblock.message.not_owner": "Seul le joueur qui a lié ces blocs peut les modifier !",
+  "teleportblock.message.cross_dimension_disabled": "La téléportation entre dimensions est désactivée.",
+  "teleportblock.message.dimension_blacklisted": "Les liaisons du bloc de téléportation vers ou depuis cette dimension sont désactivées.",
   "teleportblock.message.passive_enabled": "Mode passif activé - marche sur le bloc pour te téléporter",
   "teleportblock.message.passive_disabled": "Mode passif désactivé - clic droit pour te téléporter",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Coût max. par téléportation",
   "teleportblock.configuration.max_xp_cost.tooltip": "Plafond du coût d'une téléportation, en points d'expérience. 0 = aucune limite.",
   "teleportblock.configuration.owner_only": "Seul le propriétaire peut modifier les liaisons",
-  "teleportblock.configuration.owner_only.tooltip": "Seul le joueur qui a lié une paire, ou un opérateur du serveur, peut la relier, la renommer ou changer son mode. Tout le monde peut se téléporter."
+  "teleportblock.configuration.owner_only.tooltip": "Seul le joueur qui a lié une paire, ou un opérateur du serveur, peut la relier, la renommer ou changer son mode. Tout le monde peut se téléporter.",
+  "teleportblock.configuration.cross_dimension": "Liaisons entre dimensions",
+  "teleportblock.configuration.cross_dimension.tooltip": "Permet de lier des blocs dans des dimensions différentes. La distance utilise les coordonnées de la Surface (le Nether compte x8, comme les portails vanilla). Les liaisons existantes sont conservées tant que l'option est désactivée.",
+  "teleportblock.configuration.dimension_blacklist": "Liste noire des dimensions",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensions qui ne peuvent pas être liées à une autre dimension, par ex. minecraft:the_end. Les liaisons à l'intérieur de cette dimension fonctionnent toujours.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Coût supplémentaire entre dimensions",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Points d'expérience supplémentaires pour une téléportation entre dimensions, en plus du coût de distance. 0 = aucun supplément.",
+  "teleportblock.dimension.minecraft.overworld": "Surface",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "End",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Le bloc de téléportation bourdonne",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Passage dans une autre dimension"
 }

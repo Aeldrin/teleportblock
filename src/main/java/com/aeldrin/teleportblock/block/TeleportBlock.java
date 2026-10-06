@@ -1,19 +1,23 @@
 package com.aeldrin.teleportblock.block;
 
+import com.aeldrin.teleportblock.TeleportMessages;
+import com.aeldrin.teleportblock.ModBlockEntities;
 import com.aeldrin.teleportblock.ModConfig;
+import com.aeldrin.teleportblock.ModSounds;
 import com.aeldrin.teleportblock.ModStats;
 import com.aeldrin.teleportblock.advancement.LinkTrigger;
 import com.aeldrin.teleportblock.advancement.TeleportTrigger;
 import com.aeldrin.teleportblock.block.entity.TeleportBlockEntity;
 import com.aeldrin.teleportblock.compat.ftbchunks.FTBChunksCompat;
+import com.aeldrin.teleportblock.compat.opac.OpenPACCompat;
 import com.aeldrin.teleportblock.compat.sable.SableCompat;
 import com.aeldrin.teleportblock.compat.waystones.WaystoneCompat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -38,6 +42,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -59,6 +65,8 @@ public class TeleportBlock extends BaseEntityBlock {
     // Ожидающая линковка хранит измерение вместе с позицией (fix 2.0.1): раньше тут был голый
     // BlockPos, и если игрок кликал первый блок в Верхнем мире, а второй в Незере, мод искал
     // первый блок по тем же координатам уже в Незере - с синхронной загрузкой/генерацией чанка.
+    // С 2.2 измерение первого блока используется по назначению: линковка между мирами разрешена
+    // (если не выключена в конфиге), а первый блок ищется в СВОЁМ мире.
     // onSubLevel запоминается в момент клика (sub-level тогда точно загружен, раз по нему кликнули),
     // чтобы при завершении линковки не лезть в плот-чанк улетевшего корабля.
     private record PendingLink(ResourceKey<Level> dimension, BlockPos pos, boolean onSubLevel) {}
@@ -160,40 +168,15 @@ public class TeleportBlock extends BaseEntityBlock {
         return SHAPE;
     }
 
+    // Визуальные эффекты блока (частицы, гудение, след к партнёру) с 2.2 живут в клиентском
+    // тикере block entity - TeleportBlockEntity.clientTick. Там же объяснено, почему не animateTick.
+    // На сервере тикера нет: эффекты чисто клиентские.
+    @Nullable
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (!state.getValue(PASSIVE)) {
-            if (random.nextFloat() < 0.25f) {
-                level.addParticle(ParticleTypes.PORTAL,
-                        pos.getX() + random.nextDouble(),
-                        pos.getY() + random.nextDouble(),
-                        pos.getZ() + random.nextDouble(),
-                        0, 0, 0);
-            }
-            return;
-        }
-
-        // Пассивный режим: частицы "всасываются" внутрь блока. ParticleTypes.PORTAL на клиенте
-        // интерпретирует переданную скорость не как обычную velocity, а как смещение до цели,
-        // к которой частица плавно летит всю свою жизнь (тот же приём, что и у портала в Незер) -
-        // поэтому достаточно спавнить частицы по кругу вокруг блока со скоростью "к центру".
-        double cx = pos.getX() + 0.5;
-        double cy = pos.getY() + 0.5;
-        double cz = pos.getZ() + 0.5;
-
-        for (int i = 0; i < 3; i++) {
-            if (random.nextFloat() > 0.5f) continue;
-
-            double radius = 0.9 + random.nextDouble() * 0.6;
-            double angle = random.nextDouble() * Math.PI * 2;
-            double px = cx + Math.cos(angle) * radius;
-            double pz = cz + Math.sin(angle) * radius;
-            double py = pos.getY() + random.nextDouble() * 1.2 - 0.1;
-
-            double speed = 0.06;
-            level.addParticle(ParticleTypes.PORTAL, px, py, pz,
-                    (cx - px) * speed, (cy - py) * speed, (cz - pz) * speed);
-        }
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide()
+                ? createTickerHelper(type, ModBlockEntities.TELEPORT_BLOCK_ENTITY.get(), TeleportBlockEntity::clientTick)
+                : null;
     }
 
     public static boolean hasPendingLink(UUID playerId) {
@@ -201,22 +184,100 @@ public class TeleportBlock extends BaseEntityBlock {
     }
 
     // Забирает ожидающую линковку и проверяет, что её можно безопасно завершить в этом level.
-    // Возвращает позицию первого блока или null (сообщение игроку уже отправлено).
-    // Используется и линковкой блок-блок (useWithoutItem), и линковкой к Waystone (TeleportBlockItem).
-    public static @Nullable BlockPos takePendingLink(Player player, Level level) {
+    // Возвращает позицию и измерение первого блока или null (сообщение игроку уже отправлено).
+    // allowOtherDimension: true - линковка блок-блок (useWithoutItem), межмировая связь разрешена,
+    // если её не запрещает конфиг; false - линковка к Waystone (TeleportBlockItem), только в одном мире.
+    public static @Nullable GlobalPos takePendingLink(Player player, Level level, boolean allowOtherDimension) {
         PendingLink pending = PENDING_LINKS.remove(player.getUUID());
         if (pending == null) return null;
 
         if (!pending.dimension().equals(level.dimension())) {
-            player.displayClientMessage(Component.translatable("teleportblock.message.different_dimension"), true);
+            if (!allowOtherDimension) {
+                TeleportMessages.actionBar(player, "teleportblock.message.different_dimension");
+                return null;
+            }
+            String denial = crossDimensionDenial(pending.dimension(), level.dimension(),
+                    "teleportblock.message.different_dimension");
+            if (denial != null) {
+                TeleportMessages.actionBar(player, denial);
+                return null;
+            }
+        }
+
+        // Мир первого блока. null возможен, только если измерение исчезло, пока шла линковка.
+        Level firstLevel = level instanceof ServerLevel serverLevel
+                ? serverLevel.getServer().getLevel(pending.dimension()) : null;
+        if (firstLevel == null) {
+            TeleportMessages.actionBar(player, "teleportblock.message.first_not_found");
             return null;
         }
         // Первый блок стоял на корабле, и корабль с тех пор выгрузился - не грузим плот-чанк
-        if (pending.onSubLevel() && !level.isLoaded(pending.pos())) {
-            player.displayClientMessage(Component.translatable("teleportblock.message.target_unloaded"), true);
+        if (pending.onSubLevel() && !firstLevel.isLoaded(pending.pos())) {
+            TeleportMessages.actionBar(player, "teleportblock.message.target_unloaded");
             return null;
         }
-        return pending.pos();
+        return GlobalPos.of(pending.dimension(), pending.pos());
+    }
+
+    // === Кросс-дименшен (2.2) ===
+
+    // Можно ли связывать/телепортировать между измерениями a и b. null = можно, иначе ключ
+    // сообщения для игрока. disabledKey - какое сообщение показать, если межмировые связи
+    // выключены: при линковке это "блоки должны быть в одном измерении", при телепорте по
+    // уже существующей связи - "межмировые телепорты выключены" (связь при этом не снимается,
+    // чтобы снова заработать, если опцию включат обратно).
+    private static @Nullable String crossDimensionDenial(ResourceKey<Level> a, ResourceKey<Level> b, String disabledKey) {
+        if (a.equals(b)) return null;
+        ModConfig.Settings cfg = ModConfig.get();
+        if (!cfg.crossDimension.get()) return disabledKey;
+        if (cfg.isDimensionBlacklisted(a) || cfg.isDimensionBlacklisted(b)) {
+            return "teleportblock.message.dimension_blacklisted";
+        }
+        return null;
+    }
+
+    // Квадрат расстояния между двумя блоками, в том числе в разных измерениях.
+    // Один мир - как раньше, через SableCompat.distanceSqr (учитывает корабли).
+    // Разные миры - обе точки сначала проецируются из sub-level в мировые координаты своего мира,
+    // затем x и z переводятся в масштаб Верхнего мира через coordinateScale (Незер = 8,
+    // Верхний мир и Энд = 1, модовые измерения задают свой). Так связь Незер <-> Верхний мир
+    // считается как ванильный портал: (125, 0) в Незере и (1000, 0) наверху - расстояние 0.
+    // Y не масштабируется. Для Энда расстояние формально считается, но условно: его координаты
+    // с Верхним миром не связаны - поэтому есть отдельная доплата cross_dimension_xp_cost.
+    private static double linkDistanceSqr(Level levelA, BlockPos a, Level levelB, BlockPos b) {
+        if (levelA == levelB) {
+            return SableCompat.distanceSqr(levelA, Vec3.atCenterOf(a), Vec3.atCenterOf(b));
+        }
+        Vec3 ga = SableCompat.toGlobalPos(levelA, Vec3.atCenterOf(a));
+        Vec3 gb = SableCompat.toGlobalPos(levelB, Vec3.atCenterOf(b));
+        double scaleA = levelA.dimensionType().coordinateScale();
+        double scaleB = levelB.dimensionType().coordinateScale();
+        double dx = ga.x * scaleA - gb.x * scaleB;
+        double dy = ga.y - gb.y;
+        double dz = ga.z * scaleA - gb.z * scaleB;
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    // Мир, где стоит Waystone, на который ведёт be (2.2). WaystoneCompat.getWaystonePos ищет камень
+    // по всему серверу, поэтому телепортировать нужно в ЕГО мир, а не в мир этого блока.
+    // Если Waystones нет или камень не найден - текущий мир (как до 2.2).
+    private static @Nullable Level resolveWaystoneLevel(Level level, TeleportBlockEntity be) {
+        UUID waystoneId = be.getWaystoneTarget();
+        if (waystoneId == null || !(level instanceof ServerLevel serverLevel)
+                || !ModList.get().isLoaded("waystones")) {
+            return level;
+        }
+        ResourceKey<Level> dimension = WaystoneCompat.getWaystoneDimension(serverLevel, waystoneId);
+        return dimension != null ? serverLevel.getServer().getLevel(dimension) : level;
+    }
+
+    // Указывает ли partner (стоящий в partnerLevel) обратно на блок pos в мире level.
+    // Учитывает измерение (2.2): у партнёра null-измерение означает "мой собственный мир".
+    private static boolean pointsBackTo(TeleportBlockEntity partner, Level partnerLevel, BlockPos pos, Level level) {
+        if (!pos.equals(partner.getTarget())) return false;
+        ResourceKey<Level> backDimension = partner.getTargetDimension() != null
+                ? partner.getTargetDimension() : partnerLevel.dimension();
+        return backDimension.equals(level.dimension());
     }
 
     // Стоит ли блок на загруженном Sable sub-level прямо сейчас. Без Sable проекция - no-op,
@@ -258,6 +319,48 @@ public class TeleportBlock extends BaseEntityBlock {
         if (dx > 0.85 || dz > 0.85 || dy > 2.5) {
             ARRIVALS.remove(player.getUUID());
         }
+    }
+
+    // Подсветка первого блока во время линковки (2.2): аккуратные белые искры END_ROD по рёбрам
+    // блока, видимые только этому игроку. Раньше было лишь сообщение, и его легко пропустить.
+    // Вызывается каждый тик из ModEventHandlers.onPlayerTick; одна искра раз в 4 тика, каждая живёт
+    // около 3 секунд - на рёбрах одновременно светится примерно 15 искр, без "гирлянды".
+    // Чанк не грузим: если выбранный блок выгружен (игрок ушёл далеко), подсветка просто не нужна.
+    public static void tickPendingHighlight(ServerPlayer player) {
+        if (player.tickCount % 4 != 0) return;
+        PendingLink pending = PENDING_LINKS.get(player.getUUID());
+        if (pending == null) return;
+        if (!(player.level() instanceof ServerLevel level) || !pending.dimension().equals(level.dimension())) return;
+        BlockPos p = pending.pos();
+        if (!level.isLoaded(p)) return;
+        Vec3 worldCenter = SableCompat.toGlobalPos(level, Vec3.atCenterOf(p));
+        if (player.distanceToSqr(worldCenter) > 32.0 * 32.0) return;
+
+        // Случайная точка на одном из 12 рёбер: одна координата бежит вдоль ребра, две другие -
+        // на гранях (чуть снаружи блока, чтобы искра не пряталась в текстуре)
+        RandomSource random = level.getRandom();
+        double along = random.nextDouble();
+        double a = random.nextBoolean() ? -0.03 : 1.03;
+        double b = random.nextBoolean() ? -0.03 : 1.03;
+        double x, y, z;
+        switch (random.nextInt(3)) {
+            case 0 -> { x = along; y = a; z = b; }
+            case 1 -> { x = a; y = along; z = b; }
+            default -> { x = a; y = b; z = along; }
+        }
+        level.sendParticles(player, ParticleTypes.END_ROD, false,
+                p.getX() + x, p.getY() + y, p.getZ() + z, 1, 0, 0, 0, 0);
+    }
+
+    // Ключ позиции для кулдауна с учётом измерения (2.2): две пары на одинаковых координатах
+    // в разных мирах больше не делят один кулдаун.
+    private static long posKey(ResourceKey<Level> dimension, BlockPos pos) {
+        return pos.asLong() * 31L + dimension.location().hashCode();
+    }
+
+    private static LinkKey blockLinkKey(Level level, BlockPos pos, TeleportBlockEntity be, BlockPos target) {
+        ResourceKey<Level> targetDimension = be.getTargetDimension() != null ? be.getTargetDimension() : level.dimension();
+        return LinkKey.of(posKey(level.dimension(), pos), posKey(targetDimension, target));
     }
 
     private static boolean isStillOnArrival(ServerPlayer player, Level level, BlockPos pos) {
@@ -309,7 +412,7 @@ public class TeleportBlock extends BaseEntityBlock {
     // canModify + сообщение игроку при отказе. Используется и TeleportBlockItem (линковка к Waystone).
     public static boolean checkCanModify(Player player, TeleportBlockEntity be) {
         if (canModify(player, be)) return true;
-        player.displayClientMessage(Component.translatable("teleportblock.message.not_owner"), true);
+        TeleportMessages.actionBar(player, "teleportblock.message.not_owner");
         return false;
     }
 
@@ -335,17 +438,24 @@ public class TeleportBlock extends BaseEntityBlock {
     }
 
     // Цена конкретного прыжка: расстояние по прямой между блоками (в мировых координатах, т.е.
-    // корректно и для кораблей Sable) * xp_per_100_blocks / 100, с округлением вверх и потолком
-    // max_xp_cost (0 = без потолка). Креатив и наблюдатель не платят.
-    private static int computeXpCost(Level level, BlockPos sourcePos, Vec3 globalTarget, Player player) {
+    // корректно и для кораблей Sable; между измерениями - в масштабе Верхнего мира, см.
+    // linkDistanceSqr) * xp_per_100_blocks / 100, с округлением вверх, плюс доплата
+    // cross_dimension_xp_cost за прыжок между мирами (2.2), и потолок max_xp_cost на итог
+    // (0 = без потолка). Креатив и наблюдатель не платят.
+    private static int computeXpCost(Level level, BlockPos sourcePos, Level targetLevel, BlockPos targetPos, Player player) {
         if (player.isCreative() || player.isSpectator()) return 0;
         ModConfig.Settings cfg = ModConfig.get();
-        int per100 = cfg.xpPer100Blocks.get();
-        if (per100 <= 0) return 0;
 
-        Vec3 from = SableCompat.toGlobalPos(level, Vec3.atCenterOf(sourcePos));
-        double distance = Math.sqrt(from.distanceToSqr(globalTarget));
-        long cost = (long) Math.ceil(distance * per100 / 100.0);
+        long cost = 0;
+        int per100 = cfg.xpPer100Blocks.get();
+        if (per100 > 0) {
+            double distance = Math.sqrt(linkDistanceSqr(level, sourcePos, targetLevel, targetPos));
+            cost = (long) Math.ceil(distance * per100 / 100.0);
+        }
+        if (targetLevel != level) {
+            cost += cfg.crossDimensionXpCost.get();
+        }
+        if (cost <= 0) return 0;
 
         int cap = cfg.maxXpCost.get();
         if (cap > 0) cost = Math.min(cost, cap);
@@ -365,6 +475,8 @@ public class TeleportBlock extends BaseEntityBlock {
     //   4) место и опасности;
     //   5) FTB Chunks по МИРОВЫМ координатам;
     //   6) только потом эффекты и сам телепорт.
+    // С 2.2 цель может быть в другом измерении: всё, что касается точки прибытия, делается в
+    // targetLevel (мир партнёра), а не в level (мир этого блока). Для Waystone targetLevel = level.
     // ===========================================================================================
     private boolean doTeleport(Level level, BlockPos sourcePos, BlockPos targetPos,
                                TeleportBlockEntity be, ServerPlayer player,
@@ -372,6 +484,27 @@ public class TeleportBlock extends BaseEntityBlock {
         // Цель - другой TeleportBlock (а не waystone). У waystone-линка getTarget() == null.
         boolean blockLink = targetPos.equals(be.getTarget());
         boolean targetOnSubLevel = blockLink && be.isPartnerOnSubLevel();
+
+        // Мир точки прибытия (2.2). null - измерения партнёра больше нет (например, удалён мод с
+        // этим измерением): связь мёртвая, снимаем её так же, как при валидации ниже.
+        // Для Waystone - мир самого камня: камень может быть в другом измерении.
+        Level targetLevel = blockLink ? be.getPartnerLevel() : resolveWaystoneLevel(level, be);
+        if (targetLevel == null) {
+            unlinkSelf(level, sourcePos, be);
+            TeleportMessages.actionBar(player, "teleportblock.message.link_broken");
+            return false;
+        }
+
+        // Межмировая связь, но её запретили в конфиге уже после линковки (выключили опцию или
+        // добавили измерение в чёрный список). Связь не снимаем - заработает, если вернуть опцию.
+        // Сообщение показываем всегда (строка действий): иначе в пассивном режиме непонятно,
+        // почему ничего не происходит.
+        String denial = crossDimensionDenial(level.dimension(), targetLevel.dimension(),
+                "teleportblock.message.cross_dimension_disabled");
+        if (denial != null) {
+            TeleportMessages.actionBar(player, denial);
+            return false;
+        }
 
         Vec3 targetVec = new Vec3(targetPos.getX() + 0.5, targetPos.getY() + 1.0, targetPos.getZ() + 0.5);
 
@@ -382,17 +515,17 @@ public class TeleportBlock extends BaseEntityBlock {
         // а level.getBlockState ниже синхронно грузил чанки в этой зоне.
         // Проверка isLoaded идёт ПЕРВОЙ, до любого getBlockState по targetPos.
         if (targetOnSubLevel) {
-            if (!level.isLoaded(targetPos)) {
+            if (!targetLevel.isLoaded(targetPos)) {
                 if (showMessages) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.target_unloaded"), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.target_unloaded");
                 }
                 return false;
             }
-            Vec3 projected = SableCompat.toGlobalPos(level, targetVec);
+            Vec3 projected = SableCompat.toGlobalPos(targetLevel, targetVec);
             if (projected.distanceToSqr(targetVec) < 1.0E-4) {
                 // Проекция ничего не сдвинула - sub-level отсутствует/не загружен
                 if (showMessages) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.target_unloaded"), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.target_unloaded");
                 }
                 return false;
             }
@@ -400,15 +533,15 @@ public class TeleportBlock extends BaseEntityBlock {
 
         // Sable companion (JiJ'd): без Sable возвращает те же координаты (safe no-op),
         // с Sable — конвертирует sub-level координаты в глобальные.
-        Vec3 globalTarget = SableCompat.toGlobalPos(level, targetVec);
+        Vec3 globalTarget = SableCompat.toGlobalPos(targetLevel, targetVec);
 
         // Финальная страховка: итоговая точка обязана быть внутри границы мира.
         // Ловит любые другие случаи неудачной проекции (в т.ч. если sub-level не был
         // распознан при линковке, например у старых линков без real_target).
         // Стоит ДО партиклов/звука, чтобы эффекты не проигрывались при отмене.
-        if (!level.getWorldBorder().isWithinBounds(globalTarget.x, globalTarget.z)) {
+        if (!targetLevel.getWorldBorder().isWithinBounds(globalTarget.x, globalTarget.z)) {
             if (showMessages) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.target_unloaded"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.target_unloaded");
             }
             return false;
         }
@@ -421,23 +554,25 @@ public class TeleportBlock extends BaseEntityBlock {
         // режиме тоже) - после отвязки оно не повторится, спама не будет.
         // Для наземного партнёра getBlockEntity может загрузить его чанк - это нормально,
         // мы и так собираемся туда телепортироваться (ванильный teleport тоже грузит чанк).
+        // С 2.2 партнёр ищется в своём мире и должен указывать обратно и на наш мир (pointsBackTo).
         if (blockLink) {
-            BlockEntity targetBe = level.getBlockEntity(targetPos);
-            if (!(targetBe instanceof TeleportBlockEntity partner) || !sourcePos.equals(partner.getTarget())) {
+            BlockEntity targetBe = targetLevel.getBlockEntity(targetPos);
+            if (!(targetBe instanceof TeleportBlockEntity partner) || !pointsBackTo(partner, targetLevel, sourcePos, level)) {
                 unlinkSelf(level, sourcePos, be);
-                player.displayClientMessage(Component.translatable("teleportblock.message.link_broken"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.link_broken");
                 return false;
             }
         }
 
         // Опция check_distance_on_teleport (2.1): лимит дальности проверяется не только при линковке,
         // но и при каждом телепорте. Нужна для кораблей Create: Aeronautics - после линковки корабль
-        // может улететь сколь угодно далеко. SableCompat.distanceSqr считает в мировых координатах.
+        // может улететь сколь угодно далеко. linkDistanceSqr считает в мировых координатах и
+        // учитывает масштаб измерений (2.2).
         if (blockLink && ModConfig.get().checkDistanceOnTeleport.get()) {
             int maxDist = ModConfig.get().maxLinkDistance.get();
-            if (SableCompat.distanceSqr(level, Vec3.atCenterOf(sourcePos), Vec3.atCenterOf(targetPos)) > (double) maxDist * maxDist) {
+            if (linkDistanceSqr(level, sourcePos, targetLevel, targetPos) > (double) maxDist * maxDist) {
                 if (showMessages) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.too_far", maxDist), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.too_far", maxDist);
                 }
                 return false;
             }
@@ -446,16 +581,16 @@ public class TeleportBlock extends BaseEntityBlock {
         BlockPos feet = targetPos.above();
         BlockPos head = targetPos.above(2);
 
-        if (isObstructed(level, feet) || isObstructed(level, head)) {
+        if (isObstructed(targetLevel, feet) || isObstructed(targetLevel, head)) {
             if (showMessages) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.blocked"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.blocked");
             }
             return false;
         }
 
-        if (isHazard(level.getBlockState(feet)) || isHazard(level.getBlockState(head))) {
+        if (isHazard(targetLevel.getBlockState(feet)) || isHazard(targetLevel.getBlockState(head))) {
             if (showMessages) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.unsafe"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.unsafe");
             }
             return false;
         }
@@ -464,11 +599,22 @@ public class TeleportBlock extends BaseEntityBlock {
         // передавался targetPos, а для блока на корабле это плот-координаты, которые никто
         // не приватил - можно было запарковать корабль в чужом привате и телепортироваться туда.
         // Для наземного блока globalTarget совпадает с targetPos.above(), чанк тот же.
-        if (level instanceof ServerLevel serverLevel
+        // С 2.2 - в мире точки прибытия (targetLevel), приват в другом измерении тоже учитывается.
+        if (targetLevel instanceof ServerLevel targetServerLevel
                 && ModList.get().isLoaded("ftbchunks")
-                && !FTBChunksCompat.canTeleportTo(player, serverLevel, BlockPos.containing(globalTarget))) {
+                && !FTBChunksCompat.canTeleportTo(player, targetServerLevel, BlockPos.containing(globalTarget))) {
             if (showMessages) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.chunk_protected"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.chunk_protected");
+            }
+            return false;
+        }
+
+        // Open Parties and Claims (2.2) - то же правило, что для FTB Chunks
+        if (targetLevel instanceof ServerLevel targetServerLevel
+                && ModList.get().isLoaded("openpartiesandclaims")
+                && !OpenPACCompat.canTeleportTo(player, targetServerLevel, BlockPos.containing(globalTarget))) {
+            if (showMessages) {
+                TeleportMessages.actionBar(player, "teleportblock.message.chunk_protected");
             }
             return false;
         }
@@ -478,27 +624,55 @@ public class TeleportBlock extends BaseEntityBlock {
         // Сообщение показывается всегда (даже в пассивном режиме и для жемчуга): без него игрок
         // не поймёт, почему телепорт не сработал. Это строка действий, а не чат - спама не будет.
         // Жемчуг платит так же, иначе цену можно было бы обойти, кидая жемчуг вместо клика.
-        int xpCost = computeXpCost(level, sourcePos, globalTarget, player);
+        int xpCost = computeXpCost(level, sourcePos, targetLevel, targetPos, player);
         if (xpCost > 0 && getTotalXpPoints(player) < xpCost) {
-            player.displayClientMessage(Component.translatable("teleportblock.message.not_enough_xp", xpCost), true);
+            TeleportMessages.actionBar(player, "teleportblock.message.not_enough_xp", xpCost);
             return false;
         }
 
-        // Партиклы и звук на обоих концах
+        // Партиклы на обоих концах (у точки прибытия - в её мире, 2.2). Звуки - ниже, см. комментарии.
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(ParticleTypes.PORTAL,
                     sourcePos.getX() + 0.5, sourcePos.getY() + 1.0, sourcePos.getZ() + 0.5,
                     40, 0.3, 0.5, 0.3, 0.08);
-            serverLevel.sendParticles(ParticleTypes.PORTAL,
+        }
+        if (targetLevel instanceof ServerLevel targetServerLevel) {
+            targetServerLevel.sendParticles(ParticleTypes.PORTAL,
                     targetPos.getX() + 0.5, targetPos.getY() + 1.0, targetPos.getZ() + 0.5,
                     40, 0.3, 0.5, 0.3, 0.08);
         }
 
-        level.playSound(null, sourcePos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
-        level.playSound(null, targetPos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
+        // Звук отправления (2.2): игрок передан исключением - его слышат только окружающие.
+        // Сервер рассылает звук только тем, кто в этот момент рядом, а сам игрок через мгновение
+        // окажется далеко - для него звук обрывался. Он услышит звук прибытия ниже, целиком.
+        // Координаты - мировые (через Sable), иначе у блока на корабле звук звучал бы в плот-зоне.
+        Vec3 sourceSound = SableCompat.toGlobalPos(level, Vec3.atCenterOf(sourcePos));
+        level.playSound(player, sourceSound.x, sourceSound.y, sourceSound.z,
+                SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
 
         // globalTarget уже спроецирован и проверен выше
-        player.teleportTo(globalTarget.x, globalTarget.y, globalTarget.z);
+        if (targetLevel == level) {
+            player.teleportTo(globalTarget.x, globalTarget.y, globalTarget.z);
+        } else {
+            // Межмировой телепорт (2.2): ServerPlayer.teleportTo(ServerLevel, ...) делает
+            // changeDimension. Его может отменить другой мод (событие перехода между мирами
+            // NeoForge) - тогда игрок остаётся на месте, и мы не списываем опыт, не ставим
+            // кулдаун и не засчитываем телепорт.
+            player.teleportTo((ServerLevel) targetLevel, globalTarget.x, globalTarget.y, globalTarget.z,
+                    player.getYRot(), player.getXRot());
+            if (player.level() != targetLevel) {
+                return false;
+            }
+            // Звук перехода в другой мир - только этому игроку и тихо, как у ванильного портала.
+            // Дополняет обычный звук прибытия ниже.
+            player.playNotifySound(ModSounds.CROSS_DIMENSION.get(), SoundSource.BLOCKS,
+                    0.25f, 0.8f + player.getRandom().nextFloat() * 0.4f);
+        }
+
+        // Звук прибытия (2.2) - ПОСЛЕ переноса: теперь игрок рядом с точкой прибытия и слышит его
+        // целиком (раньше он проигрывался до переноса и до игрока не доходил). Слышат и окружающие.
+        targetLevel.playSound(null, globalTarget.x, globalTarget.y, globalTarget.z,
+                SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0f, 1.0f);
 
         // Отрицательный giveExperiencePoints - так же, как ванильная /xp add <игрок> -N points:
         // корректно откатывает уровни и синхронизирует опыт с клиентом.
@@ -509,7 +683,7 @@ public class TeleportBlock extends BaseEntityBlock {
         // Прибыли на другой TeleportBlock - он не сработает в пассивном режиме, пока игрок
         // с него не сойдёт (см. ARRIVALS / tickArrival). Для waystone не нужно.
         if (blockLink) {
-            ARRIVALS.put(player.getUUID(), new Arrival(level.dimension(), targetPos));
+            ARRIVALS.put(player.getUUID(), new Arrival(targetLevel.dimension(), targetPos));
         }
 
         be.incrementTeleportCount();
@@ -569,9 +743,12 @@ public class TeleportBlock extends BaseEntityBlock {
         // плот-чанк, как в issue #1). Теперь, как ванильный редстоун, в выгруженные чанки не лезем.
         // Реле работает, когда оба конца загружены (в т.ч. чанклоадером). Состояние партнёра
         // обновится при следующем изменении сигнала у этого блока.
-        if (!level.isLoaded(target)) return;
+        // С 2.2 партнёр может быть в другом измерении - всё делаем в его мире (partnerLevel).
+        // Межмировое реле работает, только когда чанк партнёра загружен (например, чанклоадером).
+        Level partnerLevel = be.getPartnerLevel();
+        if (partnerLevel == null || !partnerLevel.isLoaded(target)) return;
 
-        BlockState targetState = level.getBlockState(target);
+        BlockState targetState = partnerLevel.getBlockState(target);
         if (!(targetState.getBlock() instanceof TeleportBlock)) return;
 
         // Не учитываем собственный POWER этого блока как входной сигнал,
@@ -582,8 +759,8 @@ public class TeleportBlock extends BaseEntityBlock {
         // Значение не изменилось - выходим, чтобы не плодить лишние апдейты/циклы
         if (targetState.getValue(POWER) == attenuated) return;
 
-        level.setBlock(target, targetState.setValue(POWER, attenuated), Block.UPDATE_ALL);
-        level.updateNeighborsAt(target, this);
+        partnerLevel.setBlock(target, targetState.setValue(POWER, attenuated), Block.UPDATE_ALL);
+        partnerLevel.updateNeighborsAt(target, this);
     }
 
     // === Passive portal: teleport on touch (standing on top), no click required ===
@@ -623,7 +800,7 @@ public class TeleportBlock extends BaseEntityBlock {
         // чтобы клик-телепорт по-прежнему мог честно работать с cooldown_seconds=0 из конфига.
         long cooldownTicks = Math.max(ModConfig.get().cooldownSeconds.get() * 20L, MIN_PASSIVE_COOLDOWN_TICKS);
         long now = level.getGameTime();
-        LinkKey key = LinkKey.of(pos.asLong(), target.asLong());
+        LinkKey key = blockLinkKey(level, pos, be, target);
 
         // В отличие от клика, тут молча игнорируем кулдаун - иначе сообщение будет
         // спамиться каждый тик, пока игрок стоит на блоке.
@@ -647,7 +824,7 @@ public class TeleportBlock extends BaseEntityBlock {
 
         BlockPos target = be.getTarget();
         if (target == null) {
-            player.displayClientMessage(Component.translatable("teleportblock.message.not_linked"), true);
+            TeleportMessages.actionBar(player, "teleportblock.message.not_linked");
             return;
         }
 
@@ -657,7 +834,7 @@ public class TeleportBlock extends BaseEntityBlock {
         // только свою сторону: режим - общее состояние пары, рассинхрон хуже, чем отказ.
         // Наземного партнёра грузим как раньше - это разовое действие игрока, не фоновое.
         if (!be.canAccessPartner()) {
-            player.displayClientMessage(Component.translatable("teleportblock.message.target_unloaded"), true);
+            TeleportMessages.actionBar(player, "teleportblock.message.target_unloaded");
             return;
         }
 
@@ -666,15 +843,15 @@ public class TeleportBlock extends BaseEntityBlock {
 
         level.setBlock(pos, state.setValue(PASSIVE, newPassive), Block.UPDATE_ALL);
 
-        BlockState targetState = level.getBlockState(target);
+        // Партнёр - в своём мире (2.2). canAccessPartner выше гарантирует, что partnerLevel не null.
+        Level partnerLevel = be.getPartnerLevel();
+        BlockState targetState = partnerLevel.getBlockState(target);
         if (targetState.getBlock() instanceof TeleportBlock && targetState.hasProperty(PASSIVE)) {
-            level.setBlock(target, targetState.setValue(PASSIVE, newPassive), Block.UPDATE_ALL);
+            partnerLevel.setBlock(target, targetState.setValue(PASSIVE, newPassive), Block.UPDATE_ALL);
         }
 
         level.playSound(null, pos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1.0f, newPassive ? 1.4f : 0.8f);
-        player.displayClientMessage(Component.translatable(newPassive
-                ? "teleportblock.message.passive_enabled"
-                : "teleportblock.message.passive_disabled"), true);
+        TeleportMessages.actionBar(player, newPassive ? "teleportblock.message.passive_enabled" : "teleportblock.message.passive_disabled");
     }
 
     // === Ender Pearl teleport ===
@@ -711,8 +888,8 @@ public class TeleportBlock extends BaseEntityBlock {
 
         // Вычисляем ключ звена для кулдауна
         LinkKey key = waystoneTarget != null
-                ? LinkKey.of(pos.asLong(), identifierFor(waystoneTarget))
-                : LinkKey.of(pos.asLong(), blockTarget.asLong());
+                ? LinkKey.of(posKey(level.dimension(), pos), identifierFor(waystoneTarget))
+                : blockLinkKey(level, pos, be, blockTarget);
 
         if (isOnCooldown(player.getUUID(), key, pearlCooldownTicks, now)) return;
 
@@ -758,7 +935,7 @@ public class TeleportBlock extends BaseEntityBlock {
                 // Fix 2.0.1: партнёр на выгруженном корабле - имя не синхронизировать, отказываем,
                 // бирка не тратится (иначе имена у пары разъедутся)
                 if (be.getTarget() != null && !be.canAccessPartner()) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.target_unloaded"), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.target_unloaded");
                     return ItemInteractionResult.FAIL;
                 }
 
@@ -770,7 +947,7 @@ public class TeleportBlock extends BaseEntityBlock {
                 }
 
                 level.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.5f, 1.0f);
-                player.displayClientMessage(Component.translatable("teleportblock.message.named", name), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.named", name);
             }
             return ItemInteractionResult.SUCCESS;
         }
@@ -784,19 +961,40 @@ public class TeleportBlock extends BaseEntityBlock {
 
             BlockPos target = be.getTarget();
             if (target == null) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.not_linked"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.not_linked");
                 return ItemInteractionResult.FAIL;
             }
 
             int color = be.hasLinkColor() ? be.getLinkColor() : 0xFFFFFF;
 
-            com.aeldrin.teleportblock.map.TeleportMapHandler.addMarkersToMap(
-                    stack,
-                    pos.getX(), pos.getZ(),
-                    target.getX(), target.getZ(),
-                    color,
-                    be.getLinkName()
-            );
+            // Маркеры ставятся по МИРОВЫМ координатам (2.2): раньше брались сырые позиции, и для
+            // блока на корабле Sable маркер уезжал в плот-зону, далеко за пределы карты.
+            // Свой блок проецируется прямо сейчас; партнёр - по realTarget (мировая позиция на
+            // момент линковки; корабль мог с тех пор сдвинуться, но это лучшее, что известно).
+            BlockPos ownPos = BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(pos)));
+            BlockPos partnerPos = be.getRealTarget() != null ? be.getRealTarget() : target;
+
+            if (be.isCrossDimension()) {
+                // Партнёр в другом измерении: на карте этого мира его маркер не имеет смысла
+                com.aeldrin.teleportblock.map.TeleportMapHandler.addMarkerToMap(
+                        stack,
+                        ownPos.getX(), ownPos.getZ(),
+                        color,
+                        be.getLinkName()
+                );
+            } else {
+                com.aeldrin.teleportblock.map.TeleportMapHandler.addMarkersToMap(
+                        stack,
+                        ownPos.getX(), ownPos.getZ(),
+                        partnerPos.getX(), partnerPos.getZ(),
+                        color,
+                        be.getLinkName()
+                );
+            }
+
+            // Сразу рисуем маркеры на карте (2.2) - раньше они появлялись только при следующем
+            // обновлении TeleportMapHandler, с задержкой до 5 секунд
+            com.aeldrin.teleportblock.map.TeleportMapHandler.refreshDecorations(player, stack);
 
             level.playSound(null, pos, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.BLOCKS, 1.0f, 1.0f);
             return ItemInteractionResult.SUCCESS;
@@ -820,24 +1018,30 @@ public class TeleportBlock extends BaseEntityBlock {
             UUID id = player.getUUID();
 
             if (hasPendingLink(id)) {
-                // takePendingLink проверяет измерение и выгруженный корабль, сообщение уже отправлено
-                BlockPos firstPos = takePendingLink(player, level);
-                if (firstPos == null) return InteractionResult.FAIL;
+                // takePendingLink проверяет измерение (межмировые связи, чёрный список - 2.2)
+                // и выгруженный корабль; при отказе сообщение уже отправлено
+                GlobalPos first = takePendingLink(player, level, true);
+                if (first == null) return InteractionResult.FAIL;
 
-                if (firstPos.equals(pos)) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.cannot_self_link"), true);
+                // Мир первого блока (2.2) - может отличаться от мира второго. takePendingLink
+                // уже проверил, что это измерение существует.
+                Level firstLevel = ((ServerLevel) level).getServer().getLevel(first.dimension());
+                BlockPos firstPos = first.pos();
+
+                if (firstLevel == level && firstPos.equals(pos)) {
+                    TeleportMessages.actionBar(player, "teleportblock.message.cannot_self_link");
                     return InteractionResult.FAIL;
                 }
 
+                // Между измерениями - в масштабе Верхнего мира (см. linkDistanceSqr)
                 int maxDist = ModConfig.get().maxLinkDistance.get();
-                Vec3 a = Vec3.atCenterOf(firstPos);
-                Vec3 b = Vec3.atCenterOf(pos);
-                if (SableCompat.distanceSqr(level, a, b) > (double) maxDist * maxDist) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.too_far", maxDist), true);
+                if (linkDistanceSqr(firstLevel, firstPos, level, pos) > (double) maxDist * maxDist) {
+                    TeleportMessages.actionBar(player, "teleportblock.message.too_far", maxDist);
                     return InteractionResult.FAIL;
                 }
 
-                TeleportBlockEntity firstBe = (TeleportBlockEntity) level.getBlockEntity(firstPos);
+                // instanceof вместо приведения: на месте первого блока мог оказаться другой блок с BE
+                TeleportBlockEntity firstBe = firstLevel.getBlockEntity(firstPos) instanceof TeleportBlockEntity tbe ? tbe : null;
                 if (firstBe != null) {
                     // Владелец (2.1): перелинковка чужой пары запрещена с обеих сторон
                     if (!checkCanModify(player, firstBe) || !checkCanModify(player, be)) {
@@ -847,13 +1051,15 @@ public class TeleportBlock extends BaseEntityBlock {
                     // Если любой из двух блоков уже был к кому-то привязан - у старого партнёра
                     // останется "мёртвая" ссылка, если явно его не отвязать. Это и есть баг
                     // "цепь расвязывается" / блок висит координатами и занимает слот линка.
-                    unlinkOldPartner(level, firstPos, firstBe);
+                    unlinkOldPartner(firstLevel, firstPos, firstBe);
                     unlinkOldPartner(level, pos, be);
 
-                    firstBe.setTarget(pos);
+                    // Каждый блок хранит позицию партнёра и его измерение (для одного мира
+                    // setTarget сам сохранит null). realTarget проецируется в мире партнёра.
+                    firstBe.setTarget(pos, level.dimension());
                     firstBe.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(pos))));
-                    be.setTarget(firstPos);
-                    be.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(level, Vec3.atCenterOf(firstPos))));
+                    be.setTarget(firstPos, firstLevel.dimension());
+                    be.setRealTarget(BlockPos.containing(SableCompat.toGlobalPos(firstLevel, Vec3.atCenterOf(firstPos))));
 
                     int color = TeleportBlockEntity.generateRandomLinkColor();
                     firstBe.setLinkColor(color);
@@ -870,23 +1076,23 @@ public class TeleportBlock extends BaseEntityBlock {
                     }
 
                     level.playSound(null, pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
-                    player.displayClientMessage(Component.translatable("teleportblock.message.linked"), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.linked");
                     if (player instanceof ServerPlayer serverPlayer) {
                         LinkTrigger.INSTANCE.trigger(serverPlayer);
                     }
                 } else {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.first_not_found"), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.first_not_found");
                 }
             } else {
                 // Владелец (2.1): сразу говорим, что эту пару менять нельзя, а не после второго клика
                 if (!checkCanModify(player, be)) return InteractionResult.FAIL;
 
                 PENDING_LINKS.put(id, new PendingLink(level.dimension(), pos, isOnLoadedSubLevel(level, pos)));
-                player.displayClientMessage(Component.translatable("teleportblock.message.first_selected"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.first_selected");
             }
         } else {
             if (player.isPassenger()) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.dismount"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.dismount");
                 return InteractionResult.FAIL;
             }
 
@@ -897,19 +1103,19 @@ public class TeleportBlock extends BaseEntityBlock {
             BlockPos blockTarget = be.getTarget();
 
             if (waystoneTarget == null && blockTarget == null) {
-                player.displayClientMessage(Component.translatable("teleportblock.message.not_linked"), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.not_linked");
                 return InteractionResult.SUCCESS;
             }
 
             // Ключ звена вычисляется здесь же, чтобы кулдаун проверялся именно
             // для конкретной пары эндпоинтов, а не глобально по всем блокам игрока.
             LinkKey key = waystoneTarget != null
-                    ? LinkKey.of(pos.asLong(), identifierFor(waystoneTarget))
-                    : LinkKey.of(pos.asLong(), blockTarget.asLong());
+                    ? LinkKey.of(posKey(level.dimension(), pos), identifierFor(waystoneTarget))
+                    : blockLinkKey(level, pos, be, blockTarget);
 
             if (isOnCooldown(player.getUUID(), key, cooldownTicks, now)) {
                 long remaining = remainingCooldownSeconds(player.getUUID(), key, cooldownTicks, now);
-                player.displayClientMessage(Component.translatable("teleportblock.message.cooldown", remaining), true);
+                TeleportMessages.actionBar(player, "teleportblock.message.cooldown", remaining);
                 return InteractionResult.FAIL;
             }
 
@@ -919,7 +1125,7 @@ public class TeleportBlock extends BaseEntityBlock {
                     && ModList.get().isLoaded("waystones")) {
                 BlockPos waystonePos = WaystoneCompat.getWaystonePos(serverLevel, waystoneTarget);
                 if (waystonePos == null) {
-                    player.displayClientMessage(Component.translatable("teleportblock.message.waystone_lost"), true);
+                    TeleportMessages.actionBar(player, "teleportblock.message.waystone_lost");
                     be.setWaystoneTarget(null);
                     return InteractionResult.FAIL;
                 }
@@ -961,14 +1167,19 @@ public class TeleportBlock extends BaseEntityBlock {
                 // Fix 2.0.1: партнёр на выгруженном корабле не трогаем (иначе грузим плот-чанк).
                 // Его ссылка на нас станет мёртвой и будет снята автоматически при следующей
                 // попытке телепорта с его стороны (валидация ссылки в doTeleport).
+                // С 2.2 партнёр ищется в своём мире (может быть другое измерение), и отвязывается,
+                // только если он действительно указывает обратно на нас (pointsBackTo) - чтобы
+                // разрушение блока с устаревшей ссылкой не разорвало чужую, уже новую пару партнёра.
                 if (be.getTarget() != null && be.canAccessPartner()) {
                     BlockPos pairedPos = be.getTarget();
-                    BlockEntity paired = level.getBlockEntity(pairedPos);
-                    if (paired instanceof TeleportBlockEntity pairedBe) {
+                    Level pairedLevel = be.getPartnerLevel();
+                    BlockEntity paired = pairedLevel.getBlockEntity(pairedPos);
+                    if (paired instanceof TeleportBlockEntity pairedBe
+                            && pointsBackTo(pairedBe, pairedLevel, pos, level)) {
                         pairedBe.setTarget(null);
                         pairedBe.setLinkColor(-1);
                         pairedBe.setOwner(null);
-                        resetLinkState(level, pairedPos);
+                        resetLinkState(pairedLevel, pairedPos);
                     }
                 }
             }
@@ -999,18 +1210,20 @@ public class TeleportBlock extends BaseEntityBlock {
     // и не может быть перелинкован по новой (баг "цепь расвязывается").
     // Fix 2.0.1: старый партнёр на выгруженном корабле не трогаем - см. комментарий в onRemove,
     // его мёртвая ссылка будет снята лениво валидацией в doTeleport.
+    // С 2.2 старый партнёр может быть в другом измерении - ищем его в его мире.
     private void unlinkOldPartner(Level level, BlockPos pos, TeleportBlockEntity be) {
         BlockPos oldTarget = be.getTarget();
         if (oldTarget == null) return;
         if (!be.canAccessPartner()) return;
 
-        BlockEntity oldPartner = level.getBlockEntity(oldTarget);
+        Level oldLevel = be.getPartnerLevel();
+        BlockEntity oldPartner = oldLevel.getBlockEntity(oldTarget);
         if (oldPartner instanceof TeleportBlockEntity oldPartnerBe
-                && pos.equals(oldPartnerBe.getTarget())) {
+                && pointsBackTo(oldPartnerBe, oldLevel, pos, level)) {
             oldPartnerBe.setTarget(null);
             oldPartnerBe.setLinkColor(-1);
             oldPartnerBe.setOwner(null);
-            resetLinkState(level, oldTarget);
+            resetLinkState(oldLevel, oldTarget);
         }
     }
 

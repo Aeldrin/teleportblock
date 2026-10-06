@@ -1,10 +1,10 @@
 package com.aeldrin.teleportblock.item;
 
+import com.aeldrin.teleportblock.TeleportMessages;
 import com.aeldrin.teleportblock.block.TeleportBlock;
 import com.aeldrin.teleportblock.block.entity.TeleportBlockEntity;
 import com.aeldrin.teleportblock.compat.waystones.WaystoneCompat;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -60,21 +60,25 @@ public class TeleportBlockItem extends BlockItem {
         UUID playerId = player.getUUID();
 
         if (!TeleportBlock.hasPendingLink(playerId)) {
-            player.sendSystemMessage(
-                Component.translatable("teleportblock.message.no_pending_block"));
+            TeleportMessages.chat(player, "teleportblock.message.no_pending_block");
             return InteractionResult.SUCCESS;
         }
 
         // Fix 2.0.1: takePendingLink проверяет, что первый блок в этом же измерении и не на
         // выгруженном корабле (сообщение игроку отправляет сам). Раньше тут был голый BlockPos,
         // и getBlockEntity ниже мог полезть в чанк другого измерения / плот-зону Sable.
-        BlockPos pendingPos = TeleportBlock.takePendingLink(player, level);
-        if (pendingPos == null) return InteractionResult.FAIL;
+        // 2.2: связь с Waystone тоже может быть между измерениями (как и между блоками) -
+        // takePendingLink сам проверит настройки межмировых связей и чёрный список.
+        // Блок ищется в СВОЁМ мире: игрок мог выбрать его в одном измерении, а камень - в другом.
+        // Телепорт потом идёт в мир камня (TeleportBlock.resolveWaystoneLevel).
+        net.minecraft.core.GlobalPos pending = TeleportBlock.takePendingLink(player, level, true);
+        if (pending == null) return InteractionResult.FAIL;
+        BlockPos pendingPos = pending.pos();
+        net.minecraft.world.level.Level blockLevel = serverLevel.getServer().getLevel(pending.dimension());
 
-        TeleportBlockEntity be = (TeleportBlockEntity) level.getBlockEntity(pendingPos);
+        TeleportBlockEntity be = blockLevel != null && blockLevel.getBlockEntity(pendingPos) instanceof TeleportBlockEntity tbe ? tbe : null;
         if (be == null) {
-            player.sendSystemMessage(
-                Component.translatable("teleportblock.message.first_not_found"));
+            TeleportMessages.chat(player, "teleportblock.message.first_not_found");
             return InteractionResult.FAIL;
         }
 
@@ -83,18 +87,15 @@ public class TeleportBlockItem extends BlockItem {
 
         BlockPos waystonePos = WaystoneCompat.getWaystonePos(serverLevel, waystoneId);
         if (waystonePos == null) {
-            player.sendSystemMessage(
-                Component.translatable("teleportblock.message.waystone_not_found"));
+            TeleportMessages.chat(player, "teleportblock.message.waystone_not_found");
             return InteractionResult.FAIL;
         }
 
         be.setWaystoneTarget(waystoneId);
         be.setOwner(player.getUUID());
         String waystoneName = WaystoneCompat.getWaystoneName(serverLevel, waystoneId);
-        level.playSound(null, pendingPos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
-        player.sendSystemMessage(
-            Component.translatable("teleportblock.message.linked_to_waystone",
-                waystoneName != null ? waystoneName : "Waystone"));
+        blockLevel.playSound(null, pendingPos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
+        TeleportMessages.chat(player, "teleportblock.message.linked_to_waystone", waystoneName != null ? waystoneName : "Waystone");
 
         return InteractionResult.SUCCESS;
     }

@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "İki blok da aynı boyutta olmalı!",
   "teleportblock.message.not_enough_xp": "Yeterli deneyim yok! Bu ışınlanma %s deneyim puanı tutuyor.",
   "teleportblock.message.not_owner": "Bu blokları yalnızca onları bağlayan oyuncu değiştirebilir!",
+  "teleportblock.message.cross_dimension_disabled": "Boyutlar arası ışınlanma devre dışı.",
+  "teleportblock.message.dimension_blacklisted": "Bu boyuta veya bu boyuttan Işınlanma Bloğu bağlantıları devre dışı.",
   "teleportblock.message.passive_enabled": "Pasif mod etkinleştirildi - ışınlanmak için bloğun üzerine bas",
   "teleportblock.message.passive_disabled": "Pasif mod devre dışı - ışınlanmak için sağ tık kullan",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Işınlanma başına maks. maliyet",
   "teleportblock.configuration.max_xp_cost.tooltip": "Tek bir ışınlanmanın deneyim puanı cinsinden üst sınırı. 0 = sınır yok.",
   "teleportblock.configuration.owner_only": "Bağlantıları yalnızca sahibi değiştirebilir",
-  "teleportblock.configuration.owner_only.tooltip": "Bir çifti yalnızca onu bağlayan oyuncu veya bir sunucu operatörü yeniden bağlayabilir, adlandırabilir ya da modunu değiştirebilir. Işınlanmayı herkes kullanabilir."
+  "teleportblock.configuration.owner_only.tooltip": "Bir çifti yalnızca onu bağlayan oyuncu veya bir sunucu operatörü yeniden bağlayabilir, adlandırabilir ya da modunu değiştirebilir. Işınlanmayı herkes kullanabilir.",
+  "teleportblock.configuration.cross_dimension": "Boyutlar arası bağlantılar",
+  "teleportblock.configuration.cross_dimension.tooltip": "Farklı boyutlardaki blokların bağlanmasına izin verir. Mesafe Dünya ölçeğindeki koordinatlarla hesaplanır (Nether, vanilla portalları gibi x8 sayılır). Kapalıyken mevcut bağlantılar korunur.",
+  "teleportblock.configuration.dimension_blacklist": "Boyut kara listesi",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Başka bir boyuta bağlanamayan boyutlar, örn. minecraft:the_end. Böyle bir boyutun içindeki bağlantılar çalışmaya devam eder.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Boyutlar arası ek maliyet",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Boyutlar arası ışınlanma için mesafe maliyetine ek olarak alınan deneyim puanı. 0 = ek maliyet yok.",
+  "teleportblock.dimension.minecraft.overworld": "Dünya",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "Son",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Işınlanma Bloğu uğulduyor",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Başka bir boyuta geçiş"
 }

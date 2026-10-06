@@ -33,6 +33,7 @@ public class TeleportBlockMod {
         ModAdvancements.register(modEventBus);
         ModMapDecorations.MAP_DECORATION_TYPES.register(modEventBus);
         ModStats.CUSTOM_STATS.register(modEventBus);
+        ModSounds.SOUND_EVENTS.register(modEventBus);
             modEventBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> {
                 event.enqueueWork(ModStats::init);
             });

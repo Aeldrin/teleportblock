@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Both blocks must be in the same dimension!",
   "teleportblock.message.not_enough_xp": "Not enough experience! This teleport costs %s XP points.",
   "teleportblock.message.not_owner": "Only the player who linked these blocks can change them!",
+  "teleportblock.message.cross_dimension_disabled": "Teleporting between dimensions is disabled.",
+  "teleportblock.message.dimension_blacklisted": "Teleport Block links to or from this dimension are disabled.",
   "teleportblock.message.passive_enabled": "Passive mode enabled - step on the block to teleport",
   "teleportblock.message.passive_disabled": "Passive mode disabled - right-click to teleport",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Max XP Cost per Teleport",
   "teleportblock.configuration.max_xp_cost.tooltip": "Upper limit for one teleport, in experience points. 0 = no limit.",
   "teleportblock.configuration.owner_only": "Only Owner Can Change Links",
-  "teleportblock.configuration.owner_only.tooltip": "Only the player who linked a pair, or a server operator, can re-link, rename or switch its mode. Everyone can still teleport."
+  "teleportblock.configuration.owner_only.tooltip": "Only the player who linked a pair, or a server operator, can re-link, rename or switch its mode. Everyone can still teleport.",
+  "teleportblock.configuration.cross_dimension": "Allow Cross-Dimension Links",
+  "teleportblock.configuration.cross_dimension.tooltip": "Allow linking blocks in different dimensions. Distance uses Overworld-scale coordinates (the Nether counts x8, like vanilla portals). Existing links are kept while this is off.",
+  "teleportblock.configuration.dimension_blacklist": "Dimension Blacklist",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensions that cannot be linked to or from another dimension, e.g. minecraft:the_end. Links inside such a dimension still work.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Extra XP Cost Between Dimensions",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Extra experience points charged for a teleport between dimensions, on top of the distance cost. 0 = no extra cost.",
+  "teleportblock.dimension.minecraft.overworld": "Overworld",
+  "teleportblock.dimension.minecraft.the_nether": "The Nether",
+  "teleportblock.dimension.minecraft.the_end": "The End",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Teleport Block hums",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Teleported to another dimension"
 }

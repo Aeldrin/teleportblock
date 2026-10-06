@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Beide blokken moeten in dezelfde dimensie staan!",
   "teleportblock.message.not_enough_xp": "Niet genoeg ervaring! Deze teleport kost %s ervaringspunten.",
   "teleportblock.message.not_owner": "Alleen de speler die deze blokken heeft verbonden, kan ze wijzigen!",
+  "teleportblock.message.cross_dimension_disabled": "Teleporteren tussen dimensies is uitgeschakeld.",
+  "teleportblock.message.dimension_blacklisted": "Teleportblok-verbindingen met deze dimensie zijn uitgeschakeld.",
   "teleportblock.message.passive_enabled": "Passieve modus ingeschakeld - stap op het blok om te teleporteren",
   "teleportblock.message.passive_disabled": "Passieve modus uitgeschakeld - rechtermuisknop om te teleporteren",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Max. XP-kosten per teleport",
   "teleportblock.configuration.max_xp_cost.tooltip": "Bovengrens voor één teleport, in ervaringspunten. 0 = geen limiet.",
   "teleportblock.configuration.owner_only": "Alleen de eigenaar kan verbindingen wijzigen",
-  "teleportblock.configuration.owner_only.tooltip": "Alleen de speler die een paar heeft verbonden, of een serveroperator, kan het opnieuw verbinden, hernoemen of de modus wisselen. Iedereen kan teleporteren."
+  "teleportblock.configuration.owner_only.tooltip": "Alleen de speler die een paar heeft verbonden, of een serveroperator, kan het opnieuw verbinden, hernoemen of de modus wisselen. Iedereen kan teleporteren.",
+  "teleportblock.configuration.cross_dimension": "Verbindingen tussen dimensies",
+  "teleportblock.configuration.cross_dimension.tooltip": "Sta toe dat blokken in verschillende dimensies worden verbonden. De afstand gebruikt Bovenwereld-coördinaten (de Nether telt x8, zoals vanilla-portalen). Bestaande verbindingen blijven bewaard zolang dit uit staat.",
+  "teleportblock.configuration.dimension_blacklist": "Zwarte lijst van dimensies",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensies die niet met een andere dimensie kunnen worden verbonden, bijv. minecraft:the_end. Verbindingen binnen zo'n dimensie werken nog steeds.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Extra XP-kosten tussen dimensies",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Extra ervaringspunten voor een teleport tussen dimensies, bovenop de afstandskosten. 0 = geen extra kosten.",
+  "teleportblock.dimension.minecraft.overworld": "Bovenwereld",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "End",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Teleportblok zoemt",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Overgang naar een andere dimensie"
 }

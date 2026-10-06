@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Os dois blocos precisam estar na mesma dimensão!",
   "teleportblock.message.not_enough_xp": "Experiência insuficiente! Este teleporte custa %s pontos de experiência.",
   "teleportblock.message.not_owner": "Só o jogador que ligou estes blocos pode alterá-los!",
+  "teleportblock.message.cross_dimension_disabled": "O teleporte entre dimensões está desativado.",
+  "teleportblock.message.dimension_blacklisted": "As ligações do Bloco de Teleporte com esta dimensão estão desativadas.",
   "teleportblock.message.passive_enabled": "Modo passivo ativado - pise no bloco para se teleportar",
   "teleportblock.message.passive_disabled": "Modo passivo desativado - clique com o botão direito para se teleportar",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Custo máximo por teleporte",
   "teleportblock.configuration.max_xp_cost.tooltip": "Limite de custo de um teleporte, em pontos de experiência. 0 = sem limite.",
   "teleportblock.configuration.owner_only": "Só o dono pode alterar as ligações",
-  "teleportblock.configuration.owner_only.tooltip": "Só o jogador que ligou um par, ou um operador do servidor, pode religá-lo, renomeá-lo ou trocar o modo. Qualquer um pode se teleportar."
+  "teleportblock.configuration.owner_only.tooltip": "Só o jogador que ligou um par, ou um operador do servidor, pode religá-lo, renomeá-lo ou trocar o modo. Qualquer um pode se teleportar.",
+  "teleportblock.configuration.cross_dimension": "Ligações entre dimensões",
+  "teleportblock.configuration.cross_dimension.tooltip": "Permite ligar blocos em dimensões diferentes. A distância usa coordenadas na escala da Superfície (o Nether conta x8, como os portais vanilla). As ligações existentes são mantidas enquanto estiver desativado.",
+  "teleportblock.configuration.dimension_blacklist": "Lista de bloqueio de dimensões",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensões que não podem ser ligadas a outra dimensão, por exemplo minecraft:the_end. Ligações dentro dessa dimensão continuam funcionando.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Custo extra entre dimensões",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Pontos de experiência extras por um teleporte entre dimensões, além do custo da distância. 0 = sem custo extra.",
+  "teleportblock.dimension.minecraft.overworld": "Superfície",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "End",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Bloco de Teleporte zumbe",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Passagem para outra dimensão"
 }

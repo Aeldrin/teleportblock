@@ -71,3 +71,10 @@ type = "optional"
 versionRange = "[1.0,)"
 ordering = "AFTER"
 side = "CLIENT"
+
+[[dependencies.teleportblock]]
+modId = "openpartiesandclaims"
+type = "optional"
+versionRange = "[0.32,)"
+ordering = "NONE"
+side = "BOTH"

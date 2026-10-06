@@ -31,6 +31,9 @@ public class DebugOverlayHandler {
         if (be.getTarget() != null) {
             BlockPos t = be.getTarget();
             event.getRight().add("Target: " + t.getX() + ", " + t.getY() + ", " + t.getZ());
+            if (be.getTargetDimension() != null) {
+                event.getRight().add("Dimension: " + be.getTargetDimension().location());
+            }
         } else {
             event.getRight().add("Target: none");
         }

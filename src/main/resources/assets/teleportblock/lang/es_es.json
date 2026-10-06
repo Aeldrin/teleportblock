@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "¡Ambos bloques deben estar en la misma dimensión!",
   "teleportblock.message.not_enough_xp": "¡No tienes suficiente experiencia! Este teletransporte cuesta %s puntos de experiencia.",
   "teleportblock.message.not_owner": "¡Solo el jugador que vinculó estos bloques puede cambiarlos!",
+  "teleportblock.message.cross_dimension_disabled": "El teletransporte entre dimensiones está desactivado.",
+  "teleportblock.message.dimension_blacklisted": "Los vínculos del Bloque de Teletransporte con esta dimensión están desactivados.",
   "teleportblock.message.passive_enabled": "Modo pasivo activado - pisa el bloque para teletransportarte",
   "teleportblock.message.passive_disabled": "Modo pasivo desactivado - clic derecho para teletransportarte",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Coste máximo por teletransporte",
   "teleportblock.configuration.max_xp_cost.tooltip": "Límite de coste de un teletransporte, en puntos de experiencia. 0 = sin límite.",
   "teleportblock.configuration.owner_only": "Solo el dueño puede cambiar los vínculos",
-  "teleportblock.configuration.owner_only.tooltip": "Solo el jugador que vinculó un par, o un operador del servidor, puede revincularlo, renombrarlo o cambiar su modo. Cualquiera puede teletransportarse."
+  "teleportblock.configuration.owner_only.tooltip": "Solo el jugador que vinculó un par, o un operador del servidor, puede revincularlo, renombrarlo o cambiar su modo. Cualquiera puede teletransportarse.",
+  "teleportblock.configuration.cross_dimension": "Vínculos entre dimensiones",
+  "teleportblock.configuration.cross_dimension.tooltip": "Permite vincular bloques en dimensiones distintas. La distancia usa coordenadas a escala del Mundo Superior (el Nether cuenta x8, como los portales vanilla). Los vínculos existentes se conservan mientras esté desactivado.",
+  "teleportblock.configuration.dimension_blacklist": "Lista negra de dimensiones",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensiones que no se pueden vincular con otra dimensión, p. ej. minecraft:the_end. Los vínculos dentro de esa dimensión siguen funcionando.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Coste extra entre dimensiones",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Puntos de experiencia adicionales por un teletransporte entre dimensiones, además del coste por distancia. 0 = sin coste extra.",
+  "teleportblock.dimension.minecraft.overworld": "Mundo Superior",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "End",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Bloque de Teletransporte zumba",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Viaje a otra dimensión"
 }

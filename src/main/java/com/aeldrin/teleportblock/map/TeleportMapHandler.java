@@ -79,6 +79,18 @@ public class TeleportMapHandler {
         writeMarkers(mapStack, markers);
     }
 
+    /**
+     * Saves a single teleport marker (2.2). Used when the paired block is in another
+     * dimension: its marker would make no sense on a map of this dimension.
+     */
+    public static void addMarkerToMap(ItemStack mapStack, int x, int z,
+                                       int color, @Nullable String linkName) {
+        List<TeleportMarker> markers = readMarkers(mapStack);
+        markers.removeIf(m -> m.x() == x && m.z() == z);
+        markers.add(new TeleportMarker(x, z, color, linkName));
+        writeMarkers(mapStack, markers);
+    }
+
     public static List<TeleportMarker> readMarkers(ItemStack mapStack) {
         List<TeleportMarker> result = new ArrayList<>();
         CustomData customData = mapStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
@@ -111,19 +123,25 @@ public class TeleportMapHandler {
         if (player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer)) return;
 
-        // Throttle: every 100 ticks (5 seconds)
-        if (player.tickCount % 100 != 0) return;
+        // 2.2: only the maps in hand, once per second. Before 2.2 the whole inventory was
+        // scanned every 5 seconds for every player: more work, and markers still appeared with
+        // a delay of up to 5 seconds. Decorations stay in the map data once added, and a map is
+        // only visible while held, so refreshing the held maps is enough. A map placed in an item
+        // frame keeps the decorations it got while it was held.
+        if (player.tickCount % 20 != 0) return;
 
-        // Check both hands + inventory for filled maps
-        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            ItemStack stack = player.getInventory().getItem(i);
-            if (stack.is(Items.FILLED_MAP)) {
-                refreshDecorations(player, stack);
-            }
+        ItemStack mainHand = player.getMainHandItem();
+        if (mainHand.is(Items.FILLED_MAP)) {
+            refreshDecorations(player, mainHand);
+        }
+        ItemStack offHand = player.getOffhandItem();
+        if (offHand.is(Items.FILLED_MAP)) {
+            refreshDecorations(player, offHand);
         }
     }
 
-    private static void refreshDecorations(Player player, ItemStack mapStack) {
+    // Public since 2.2: TeleportBlock calls it right after adding markers, so they appear instantly.
+    public static void refreshDecorations(Player player, ItemStack mapStack) {
         List<TeleportMarker> markers = readMarkers(mapStack);
         if (markers.isEmpty()) return;
 

@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Обидва блоки мають бути в одному вимірі!",
   "teleportblock.message.not_enough_xp": "Недостатньо досвіду! Цей телепорт коштує %s очок досвіду.",
   "teleportblock.message.not_owner": "Змінювати ці блоки може лише гравець, який їх зв'язав!",
+  "teleportblock.message.cross_dimension_disabled": "Телепорт між вимірами вимкнено.",
+  "teleportblock.message.dimension_blacklisted": "Зв'язки блоків телепортації з цим виміром вимкнено.",
   "teleportblock.message.passive_enabled": "Пасивний режим увімкнено - стань на блок щоб телепортуватись",
   "teleportblock.message.passive_disabled": "Пасивний режим вимкнено - використай ПКМ щоб телепортуватись",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Макс. ціна одного телепорту",
   "teleportblock.configuration.max_xp_cost.tooltip": "Верхня межа ціни одного телепорту в очках досвіду. 0 = без обмеження.",
   "teleportblock.configuration.owner_only": "Змінювати зв'язок може лише власник",
-  "teleportblock.configuration.owner_only.tooltip": "Перезв'язати, перейменувати чи перемкнути режим пари може лише той, хто її зв'язав, або оператор сервера. Телепортуватися може будь-хто."
+  "teleportblock.configuration.owner_only.tooltip": "Перезв'язати, перейменувати чи перемкнути режим пари може лише той, хто її зв'язав, або оператор сервера. Телепортуватися може будь-хто.",
+  "teleportblock.configuration.cross_dimension": "Міжсвітові зв'язки",
+  "teleportblock.configuration.cross_dimension.tooltip": "Дозволити зв'язувати блоки в різних вимірах. Відстань рахується в координатах Верхнього світу (Незер x8, як у ванільних порталів). Наявні зв'язки під час вимкнення зберігаються.",
+  "teleportblock.configuration.dimension_blacklist": "Чорний список вимірів",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Виміри, які не можна зв'язувати з іншими вимірами, наприклад minecraft:the_end. Зв'язки всередині такого виміру працюють.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Доплата досвідом між вимірами",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Додаткові очки досвіду за телепорт між вимірами, понад ціну за відстань. 0 = без доплати.",
+  "teleportblock.dimension.minecraft.overworld": "Верхній світ",
+  "teleportblock.dimension.minecraft.the_nether": "Незер",
+  "teleportblock.dimension.minecraft.the_end": "Енд",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Блок телепортації гуде",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Перехід в інший вимір"
 }

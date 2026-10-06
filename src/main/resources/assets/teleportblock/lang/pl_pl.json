@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Oba bloki muszą być w tym samym wymiarze!",
   "teleportblock.message.not_enough_xp": "Za mało doświadczenia! Ten teleport kosztuje %s punktów doświadczenia.",
   "teleportblock.message.not_owner": "Tylko gracz, który połączył te bloki, może je zmieniać!",
+  "teleportblock.message.cross_dimension_disabled": "Teleportacja między wymiarami jest wyłączona.",
+  "teleportblock.message.dimension_blacklisted": "Połączenia Bloku Teleportacji z tym wymiarem są wyłączone.",
   "teleportblock.message.passive_enabled": "Tryb pasywny włączony - wejdź na blok, aby się teleportować",
   "teleportblock.message.passive_disabled": "Tryb pasywny wyłączony - użyj PPM, aby się teleportować",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Maks. koszt jednego teleportu",
   "teleportblock.configuration.max_xp_cost.tooltip": "Górny limit kosztu jednego teleportu w punktach doświadczenia. 0 = bez limitu.",
   "teleportblock.configuration.owner_only": "Tylko właściciel może zmieniać połączenia",
-  "teleportblock.configuration.owner_only.tooltip": "Tylko gracz, który połączył parę, lub operator serwera może ją ponownie połączyć, zmienić nazwę lub tryb. Teleportować się może każdy."
+  "teleportblock.configuration.owner_only.tooltip": "Tylko gracz, który połączył parę, lub operator serwera może ją ponownie połączyć, zmienić nazwę lub tryb. Teleportować się może każdy.",
+  "teleportblock.configuration.cross_dimension": "Połączenia między wymiarami",
+  "teleportblock.configuration.cross_dimension.tooltip": "Pozwala łączyć bloki w różnych wymiarach. Odległość liczona jest we współrzędnych świata zwykłego (Nether liczy się x8, jak w portalach vanilla). Istniejące połączenia są zachowywane, gdy opcja jest wyłączona.",
+  "teleportblock.configuration.dimension_blacklist": "Czarna lista wymiarów",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Wymiary, których nie można łączyć z innym wymiarem, np. minecraft:the_end. Połączenia wewnątrz takiego wymiaru nadal działają.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Dodatkowy koszt między wymiarami",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Dodatkowe punkty doświadczenia za teleport między wymiarami, ponad koszt odległości. 0 = bez dopłaty.",
+  "teleportblock.dimension.minecraft.overworld": "Świat zwykły",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "Kres",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Blok Teleportacji buczy",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Przejście do innego wymiaru"
 }

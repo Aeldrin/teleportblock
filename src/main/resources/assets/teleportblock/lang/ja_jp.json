@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "両方のブロックは同じディメンションにある必要があります！",
   "teleportblock.message.not_enough_xp": "経験値が足りません！このテレポートには経験値ポイントが%s必要です。",
   "teleportblock.message.not_owner": "これらのブロックを変更できるのは、リンクしたプレイヤーだけです！",
+  "teleportblock.message.cross_dimension_disabled": "ディメンション間のテレポートは無効になっています。",
+  "teleportblock.message.dimension_blacklisted": "このディメンションとのテレポートブロックのリンクは無効になっています。",
   "teleportblock.message.passive_enabled": "パッシブモード有効 - ブロックの上に乗るとテレポートします",
   "teleportblock.message.passive_disabled": "パッシブモード無効 - 右クリックでテレポートします",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "1回のテレポートの最大コスト",
   "teleportblock.configuration.max_xp_cost.tooltip": "1回のテレポートにかかる経験値ポイントの上限です。0 = 上限なし。",
   "teleportblock.configuration.owner_only": "リンクの変更は所有者のみ",
-  "teleportblock.configuration.owner_only.tooltip": "ペアをリンクしたプレイヤーかサーバーのオペレーターだけが、再リンク、名前の変更、モードの切り替えを行えます。テレポートは誰でも使えます。"
+  "teleportblock.configuration.owner_only.tooltip": "ペアをリンクしたプレイヤーかサーバーのオペレーターだけが、再リンク、名前の変更、モードの切り替えを行えます。テレポートは誰でも使えます。",
+  "teleportblock.configuration.cross_dimension": "ディメンション間のリンク",
+  "teleportblock.configuration.cross_dimension.tooltip": "異なるディメンションのブロック同士をリンクできるようにします。距離はオーバーワールドの座標で計算されます（バニラのポータルと同様にネザーは8倍）。無効にしても既存のリンクは保持されます。",
+  "teleportblock.configuration.dimension_blacklist": "ディメンションのブラックリスト",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "他のディメンションとリンクできないディメンションです（例: minecraft:the_end）。そのディメンション内のリンクは引き続き使えます。",
+  "teleportblock.configuration.cross_dimension_xp_cost": "ディメンション間の追加コスト",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "ディメンション間のテレポートで、距離のコストに加えて消費する経験値ポイントです。0 = 追加コストなし。",
+  "teleportblock.dimension.minecraft.overworld": "オーバーワールド",
+  "teleportblock.dimension.minecraft.the_nether": "ネザー",
+  "teleportblock.dimension.minecraft.the_end": "ジ・エンド",
+  "subtitles.teleportblock.block.teleport_block.ambient": "テレポートブロックがうなる",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "別のディメンションへ移動"
 }

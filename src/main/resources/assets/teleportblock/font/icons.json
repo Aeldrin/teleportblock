@@ -1,0 +1,11 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "teleportblock:map/decorations/teleport_block.png",
+      "height": 8,
+      "ascent": 7,
+      "chars": ["\ue000"]
+    }
+  ]
+}

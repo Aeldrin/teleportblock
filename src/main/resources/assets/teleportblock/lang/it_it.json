@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Entrambi i blocchi devono trovarsi nella stessa dimensione!",
   "teleportblock.message.not_enough_xp": "Esperienza insufficiente! Questo teletrasporto costa %s punti esperienza.",
   "teleportblock.message.not_owner": "Solo il giocatore che ha collegato questi blocchi può modificarli!",
+  "teleportblock.message.cross_dimension_disabled": "Il teletrasporto tra dimensioni è disattivato.",
+  "teleportblock.message.dimension_blacklisted": "I collegamenti del Blocco di Teletrasporto con questa dimensione sono disattivati.",
   "teleportblock.message.passive_enabled": "Modalità passiva attivata - cammina sul blocco per teletrasportarti",
   "teleportblock.message.passive_disabled": "Modalità passiva disattivata - tasto destro per teletrasportarti",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Costo massimo per teletrasporto",
   "teleportblock.configuration.max_xp_cost.tooltip": "Limite di costo di un singolo teletrasporto, in punti esperienza. 0 = nessun limite.",
   "teleportblock.configuration.owner_only": "Solo il proprietario può modificare i collegamenti",
-  "teleportblock.configuration.owner_only.tooltip": "Solo il giocatore che ha collegato una coppia, o un operatore del server, può ricollegarla, rinominarla o cambiarne la modalità. Chiunque può teletrasportarsi."
+  "teleportblock.configuration.owner_only.tooltip": "Solo il giocatore che ha collegato una coppia, o un operatore del server, può ricollegarla, rinominarla o cambiarne la modalità. Chiunque può teletrasportarsi.",
+  "teleportblock.configuration.cross_dimension": "Collegamenti tra dimensioni",
+  "teleportblock.configuration.cross_dimension.tooltip": "Permette di collegare blocchi in dimensioni diverse. La distanza usa le coordinate del Sopramondo (il Nether conta x8, come i portali vanilla). I collegamenti esistenti restano mentre l'opzione è disattivata.",
+  "teleportblock.configuration.dimension_blacklist": "Lista nera delle dimensioni",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensioni che non possono essere collegate a un'altra dimensione, ad es. minecraft:the_end. I collegamenti all'interno di tale dimensione funzionano comunque.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Costo extra tra dimensioni",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Punti esperienza aggiuntivi per un teletrasporto tra dimensioni, oltre al costo della distanza. 0 = nessun costo extra.",
+  "teleportblock.dimension.minecraft.overworld": "Sopramondo",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "End",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Il Blocco di Teletrasporto ronza",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Passaggio in un'altra dimensione"
 }

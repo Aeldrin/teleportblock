@@ -1,7 +1,12 @@
 package com.aeldrin.teleportblock;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.ModConfigSpec;
+
+import java.util.List;
 
 // Настройки мода (2.1). Два одинаковых по структуре набора, каждый в своём файле:
 //   - SINGLEPLAYER -> config/teleportblock-singleplayer.toml, регистрируется только у клиента.
@@ -33,6 +38,9 @@ public class ModConfig {
         public final ModConfigSpec.IntValue xpPer100Blocks;
         public final ModConfigSpec.IntValue maxXpCost;
         public final ModConfigSpec.BooleanValue ownerOnly;
+        public final ModConfigSpec.BooleanValue crossDimension;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> dimensionBlacklist;
+        public final ModConfigSpec.IntValue crossDimensionXpCost;
 
         private Settings() {
             ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -68,7 +76,34 @@ public class ModConfig {
                             "toggle its passive mode or rename it. Links made before 2.1 have no owner and stay shared.")
                     .define("owner_only", false);
 
+            // === Кросс-дименшен (2.2) ===
+            // Расстояние между измерениями считается в координатах Верхнего мира: x и z умножаются
+            // на масштаб измерения (Незер = 8, Верхний мир и Энд = 1, модовые измерения - свой).
+            // Так связь Незер <-> Верхний мир работает как ванильный портал. Энд не ограничивается
+            // отдельно: чтобы поставить там блок, игрок должен туда попасть - прогресс не пропускается.
+            crossDimension = builder
+                    .comment("Allow linking Teleport Blocks in different dimensions.",
+                            "Distance between dimensions uses Overworld-scale coordinates (the Nether counts x8, like vanilla portals).",
+                            "Existing cross-dimension links stop working while this is off, but are kept.")
+                    .define("cross_dimension", true);
+
+            dimensionBlacklist = builder
+                    .comment("Dimensions that cannot be linked to or from another dimension, e.g. [\"minecraft:the_end\"].",
+                            "Links inside such a dimension still work.")
+                    .defineListAllowEmpty("dimension_blacklist", List.of(), () -> "",
+                            entry -> entry instanceof String id && ResourceLocation.tryParse(id) != null);
+
+            crossDimensionXpCost = builder
+                    .comment("Extra experience POINTS charged for a teleport between dimensions, on top of the distance cost.",
+                            "0 = no extra cost. Creative and spectator players are never charged.")
+                    .defineInRange("cross_dimension_xp_cost", 0, 0, 200);
+
             spec = builder.build();
+        }
+
+        // Измерение в чёрном списке межмировых связей
+        public boolean isDimensionBlacklisted(ResourceKey<Level> dimension) {
+            return dimensionBlacklist.get().contains(dimension.location().toString());
         }
     }
 

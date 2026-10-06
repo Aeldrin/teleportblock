@@ -9,6 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -58,9 +59,21 @@ public class TeleportBlockJadeProvider implements IBlockComponentProvider, IServ
                 tooltip.add(Component.translatable("teleportblock.jade.linked_waystone")
                         .withStyle(ChatFormatting.AQUA));
             } else {
-                tooltip.add(Component.literal(
-                        data.getInt("tx") + ", " + data.getInt("ty") + ", " + data.getInt("tz"))
-                        .withStyle(ChatFormatting.GRAY));
+                MutableComponent coords = Component.literal(
+                        data.getInt("tx") + ", " + data.getInt("ty") + ", " + data.getInt("tz"));
+                // Партнёр в другом измерении (2.2) - дописываем название измерения.
+                // Ключ teleportblock.dimension.<namespace>.<path> переведён для ванильных миров;
+                // для модовых измерений показывается их id (например aether:the_aether).
+                if (data.contains("tdim")) {
+                    String dim = data.getString("tdim");
+                    ResourceLocation dimId = ResourceLocation.tryParse(dim);
+                    Component dimName = dimId != null
+                            ? Component.translatableWithFallback(
+                                    "teleportblock.dimension." + dimId.getNamespace() + "." + dimId.getPath(), dim)
+                            : Component.literal(dim);
+                    coords = coords.append(" (").append(dimName).append(")");
+                }
+                tooltip.add(coords.withStyle(ChatFormatting.GRAY));
             }
         } else {
             tooltip.add(Component.translatable("teleportblock.jade.not_linked")
@@ -78,7 +91,12 @@ public class TeleportBlockJadeProvider implements IBlockComponentProvider, IServ
             data.putBoolean("waystone", linkedToWaystone);
 
             if (linkedToBlock) {
-                Vec3 real = SableCompat.toGlobalPos(accessor.getLevel(), Vec3.atCenterOf(be.getTarget()));
+                // 2.2: проекция в мире партнёра (он может быть в другом измерении)
+                Level partnerLevel = be.getPartnerLevel() != null ? be.getPartnerLevel() : accessor.getLevel();
+                Vec3 real = SableCompat.toGlobalPos(partnerLevel, Vec3.atCenterOf(be.getTarget()));
+                if (be.isCrossDimension()) {
+                    data.putString("tdim", be.getTargetDimension().location().toString());
+                }
                 data.putInt("tx", (int) real.x);
                 data.putInt("ty", (int) real.y);
                 data.putInt("tz", (int) real.z);

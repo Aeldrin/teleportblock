@@ -1,0 +1,64 @@
+{
+  "block.teleport_block.ambient": {
+    "subtitle": "subtitles.teleportblock.block.teleport_block.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:block.respawn_anchor.ambient",
+        "type": "event"
+      }
+    ]
+  },
+  "block.teleport_block.cross_dimension": {
+    "subtitle": "subtitles.teleportblock.block.teleport_block.cross_dimension",
+    "sounds": [
+      {
+        "name": "minecraft:block.portal.travel",
+        "type": "event"
+      }
+    ]
+  },
+  "block.teleport_block.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      {
+        "name": "minecraft:block.respawn_anchor.deplete",
+        "type": "event"
+      }
+    ]
+  },
+  "block.teleport_block.step": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      {
+        "name": "minecraft:block.lodestone.step",
+        "type": "event"
+      }
+    ]
+  },
+  "block.teleport_block.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      {
+        "name": "minecraft:block.respawn_anchor.charge",
+        "type": "event"
+      }
+    ]
+  },
+  "block.teleport_block.hit": {
+    "subtitle": "subtitles.block.generic.hit",
+    "sounds": [
+      {
+        "name": "minecraft:block.lodestone.hit",
+        "type": "event"
+      }
+    ]
+  },
+  "block.teleport_block.fall": {
+    "sounds": [
+      {
+        "name": "minecraft:block.lodestone.fall",
+        "type": "event"
+      }
+    ]
+  }
+}

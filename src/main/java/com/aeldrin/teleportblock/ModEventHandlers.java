@@ -31,6 +31,8 @@ public class ModEventHandlers {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             TeleportBlock.tickArrival(serverPlayer);
+            // 2.2: белая подсветка первого блока, пока игрок выбирает пару для линковки
+            TeleportBlock.tickPendingHighlight(serverPlayer);
         }
     }
 }

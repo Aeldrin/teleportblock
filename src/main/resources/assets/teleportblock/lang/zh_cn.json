@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "两个方块必须位于同一维度！",
   "teleportblock.message.not_enough_xp": "经验不足！此次传送需要 %s 点经验。",
   "teleportblock.message.not_owner": "只有连接这些方块的玩家才能修改它们！",
+  "teleportblock.message.cross_dimension_disabled": "维度间传送已禁用。",
+  "teleportblock.message.dimension_blacklisted": "与此维度之间的传送方块连接已禁用。",
   "teleportblock.message.passive_enabled": "被动模式已启用 - 踩在方块上即可传送",
   "teleportblock.message.passive_disabled": "被动模式已禁用 - 右键点击进行传送",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "单次传送最大消耗",
   "teleportblock.configuration.max_xp_cost.tooltip": "单次传送消耗的经验点数上限。0 = 无上限。",
   "teleportblock.configuration.owner_only": "仅所有者可修改连接",
-  "teleportblock.configuration.owner_only.tooltip": "只有连接这对方块的玩家或服务器管理员可以重新连接、重命名或切换模式。任何人都可以传送。"
+  "teleportblock.configuration.owner_only.tooltip": "只有连接这对方块的玩家或服务器管理员可以重新连接、重命名或切换模式。任何人都可以传送。",
+  "teleportblock.configuration.cross_dimension": "跨维度连接",
+  "teleportblock.configuration.cross_dimension.tooltip": "允许连接位于不同维度的方块。距离按主世界坐标计算（与原版传送门相同，下界按 x8 计算）。关闭时现有连接会被保留。",
+  "teleportblock.configuration.dimension_blacklist": "维度黑名单",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "无法与其他维度连接的维度，例如 minecraft:the_end。该维度内部的连接仍然有效。",
+  "teleportblock.configuration.cross_dimension_xp_cost": "跨维度额外消耗",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "跨维度传送时在距离消耗之外额外消耗的经验点数。0 = 无额外消耗。",
+  "teleportblock.dimension.minecraft.overworld": "主世界",
+  "teleportblock.dimension.minecraft.the_nether": "下界",
+  "teleportblock.dimension.minecraft.the_end": "末地",
+  "subtitles.teleportblock.block.teleport_block.ambient": "传送方块：嗡嗡作响",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "传送至另一维度"
 }

@@ -22,6 +22,8 @@
   "teleportblock.message.different_dimension": "Beide Blöcke müssen in derselben Dimension sein!",
   "teleportblock.message.not_enough_xp": "Nicht genug Erfahrung! Dieser Teleport kostet %s Erfahrungspunkte.",
   "teleportblock.message.not_owner": "Nur der Spieler, der diese Blöcke verbunden hat, kann sie ändern!",
+  "teleportblock.message.cross_dimension_disabled": "Teleportieren zwischen Dimensionen ist deaktiviert.",
+  "teleportblock.message.dimension_blacklisted": "Teleportblock-Verbindungen zu oder aus dieser Dimension sind deaktiviert.",
   "teleportblock.message.passive_enabled": "Passiver Modus aktiviert - betrete den Block zum Teleportieren",
   "teleportblock.message.passive_disabled": "Passiver Modus deaktiviert - Rechtsklick zum Teleportieren",
 
@@ -73,5 +75,16 @@
   "teleportblock.configuration.max_xp_cost": "Max. Erfahrungskosten pro Teleport",
   "teleportblock.configuration.max_xp_cost.tooltip": "Obergrenze für einen Teleport in Erfahrungspunkten. 0 = keine Grenze.",
   "teleportblock.configuration.owner_only": "Nur der Besitzer darf Verbindungen ändern",
-  "teleportblock.configuration.owner_only.tooltip": "Nur der Spieler, der ein Paar verbunden hat, oder ein Serveroperator kann es neu verbinden, umbenennen oder den Modus wechseln. Teleportieren kann jeder."
+  "teleportblock.configuration.owner_only.tooltip": "Nur der Spieler, der ein Paar verbunden hat, oder ein Serveroperator kann es neu verbinden, umbenennen oder den Modus wechseln. Teleportieren kann jeder.",
+  "teleportblock.configuration.cross_dimension": "Verbindungen zwischen Dimensionen",
+  "teleportblock.configuration.cross_dimension.tooltip": "Erlaubt das Verbinden von Blöcken in verschiedenen Dimensionen. Die Distanz wird in Oberwelt-Koordinaten berechnet (der Nether zählt x8, wie bei Vanilla-Portalen). Bestehende Verbindungen bleiben erhalten, solange dies aus ist.",
+  "teleportblock.configuration.dimension_blacklist": "Dimensions-Sperrliste",
+  "teleportblock.configuration.dimension_blacklist.tooltip": "Dimensionen, die nicht mit anderen Dimensionen verbunden werden können, z. B. minecraft:the_end. Verbindungen innerhalb einer solchen Dimension funktionieren weiterhin.",
+  "teleportblock.configuration.cross_dimension_xp_cost": "Erfahrungsaufschlag zwischen Dimensionen",
+  "teleportblock.configuration.cross_dimension_xp_cost.tooltip": "Zusätzliche Erfahrungspunkte für einen Teleport zwischen Dimensionen, zusätzlich zu den Distanzkosten. 0 = kein Aufschlag.",
+  "teleportblock.dimension.minecraft.overworld": "Oberwelt",
+  "teleportblock.dimension.minecraft.the_nether": "Nether",
+  "teleportblock.dimension.minecraft.the_end": "Ende",
+  "subtitles.teleportblock.block.teleport_block.ambient": "Teleportblock summt",
+  "subtitles.teleportblock.block.teleport_block.cross_dimension": "Wechsel in eine andere Dimension"
 }
